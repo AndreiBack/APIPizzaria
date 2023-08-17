@@ -13,42 +13,36 @@ import java.util.List;
 @RequestMapping("/enderecos")
 public class EnderecoController {
 
-    private final EnderecoService enderecoService;
-
     @Autowired
-    public EnderecoController(EnderecoService enderecoService) {
-        this.enderecoService = enderecoService;
+    private EnderecoService enderecoService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Endereco> getEndereco(@PathVariable Long id) {
+        Endereco endereco = enderecoService.findById(id);
+        return new ResponseEntity<>(endereco, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<Endereco>> getAllEnderecos() {
-        List<Endereco> enderecos = enderecoService.getAllEnderecos();
+        List<Endereco> enderecos = enderecoService.findAll();
         return new ResponseEntity<>(enderecos, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Endereco> createEndereco(@RequestBody Endereco endereco) {
-        Endereco createdEndereco = enderecoService.createEndereco(endereco);
-        return new ResponseEntity<>(createdEndereco, HttpStatus.CREATED);
+    public ResponseEntity<Void> createEndereco(@RequestBody Endereco endereco) {
+        enderecoService.create(endereco);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Endereco> updateEndereco(@PathVariable Long id, @RequestBody Endereco endereco) {
-        Endereco updatedEndereco = enderecoService.updateEndereco(id, endereco);
-        if (updatedEndereco != null) {
-            return new ResponseEntity<>(updatedEndereco, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Void> updateEndereco(@PathVariable Long id, @RequestBody Endereco endereco) {
+        enderecoService.update(id, endereco);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEndereco(@PathVariable Long id) {
-        boolean deleted = enderecoService.deleteEndereco(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        enderecoService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -19,6 +19,10 @@ public class Pizza {
     @Column(name = "tamanho", length = 1, nullable = false)
     String tamanho;
     @ManyToOne
-    @JoinColumn(name = "produto", nullable = false)
+    @JoinTable(
+            name = "pizza_sabor",
+            joinColumns = @JoinColumn(name = "pizza_id"),
+            inverseJoinColumns = @JoinColumn(name = "sabor_id")
+    )
     Produto produto;
 }

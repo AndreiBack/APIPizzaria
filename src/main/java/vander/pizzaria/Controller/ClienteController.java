@@ -13,42 +13,36 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    private final ClienteService clienteService;
-
     @Autowired
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
+    private ClienteService clienteService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> getCliente(@PathVariable Long id) {
+        Cliente cliente = clienteService.findById(id);
+        return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = clienteService.getAllClientes();
+        List<Cliente> clientes = clienteService.findAll();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
-        Cliente createdCliente = clienteService.createCliente(cliente);
-        return new ResponseEntity<>(createdCliente, HttpStatus.CREATED);
+    public ResponseEntity<Void> createCliente(@RequestBody Cliente cliente) {
+        clienteService.create(cliente);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
-        Cliente updatedCliente = clienteService.updateCliente(id, cliente);
-        if (updatedCliente != null) {
-            return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Void> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+        clienteService.update(id, cliente);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
-        boolean deleted = clienteService.deleteCliente(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        clienteService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -16,6 +16,6 @@ public class Sabor {
     Long id;
     @Column(name = "ingredientes", nullable = false)
     List<String> ingredientes;
-    @ManyToMany
+    @ManyToMany(mappedBy = "sabores")
     List<Pizza> pizzas;
 }

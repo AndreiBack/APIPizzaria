@@ -31,7 +31,6 @@ public class PizzaController {
         Pizza createdPizza = pizzaService.createPizza(pizza);
         return new ResponseEntity<>(createdPizza, HttpStatus.CREATED);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<Pizza> updatePizza(@PathVariable Long id, @RequestBody Pizza pizza) {
         Pizza updatedPizza = pizzaService.updatePizza(id, pizza);
