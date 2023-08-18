@@ -1,5 +1,6 @@
 package vander.pizzaria.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,5 +21,5 @@ public class Produto {
     @Column(name = "descricao", length = 250, nullable = false)
     String descricao;
     @Column(name = "valorTotal", nullable = false)
-    BigDecimal valorTotal;
+    double valorTotal;
 }

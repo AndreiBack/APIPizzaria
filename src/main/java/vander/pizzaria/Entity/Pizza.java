@@ -1,5 +1,6 @@
 package vander.pizzaria.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,9 @@ public class Pizza {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @Column(name = "valor", nullable = false)
+    double valor;
 
     @Column(name = "tamanho", length = 1, nullable = false)
     String tamanho;

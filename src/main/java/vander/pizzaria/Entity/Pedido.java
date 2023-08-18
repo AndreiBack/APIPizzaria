@@ -1,6 +1,7 @@
 package vander.pizzaria.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,9 @@ public class Pedido {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     Date dataHora;
+    @ManyToOne
+    @JoinColumn(name = "Cliente")
+    Cliente cliente;
     @ManyToOne
     @JoinColumn(name = "funcionarios")
     Funcionario funcionario;

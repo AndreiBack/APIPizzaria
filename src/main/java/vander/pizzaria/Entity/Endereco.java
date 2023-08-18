@@ -23,7 +23,5 @@ public class Endereco {
     String bairro;
     @Column(name = "numero", nullable = false)
     int numero;
-    @ManyToMany
-    @Column(name = "clientes")
-    List<Cliente> clientes ;
+
 }
