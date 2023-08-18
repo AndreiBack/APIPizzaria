@@ -1,5 +1,6 @@
 package vander.pizzaria.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ public class Pedido {
     @Column(name = "valor", nullable = false)
     double valor;
     @Column(name = "data", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     Date dataHora;
     @ManyToOne
     @JoinColumn(name = "funcionarios")
@@ -31,4 +34,8 @@ public class Pedido {
     @ManyToMany
     @JoinTable( name = "pedido_produtos", joinColumns = @JoinColumn(name = "pedido_id"), inverseJoinColumns = @JoinColumn(name = "produto_id"))
     List<Produto> produtos;
+    @PrePersist
+    public void prePersist() {
+        dataHora = new Date();
+    }
 }
