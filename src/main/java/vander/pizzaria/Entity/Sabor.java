@@ -14,8 +14,9 @@ public class Sabor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @Column(name = "nome", length = 100, nullable = false)
+    String nome;
     @Column(name = "ingredientes", nullable = false)
     List<String> ingredientes;
-    @ManyToMany(mappedBy = "sabores")
-    List<Pizza> pizzas;
+
 }

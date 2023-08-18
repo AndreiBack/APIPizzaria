@@ -15,7 +15,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "nome", length = 10, nullable = false)
+    @Column(name = "nome", length = 100, nullable = false)
     String nome;
     @Column(name = "idade", nullable = false)
     int idade;
