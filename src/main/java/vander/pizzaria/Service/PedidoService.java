@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Service
 public class PedidoService {
-
     private final PedidoRepository pedidoRepository;
 
     @Autowired
@@ -45,7 +44,6 @@ public class PedidoService {
         }
         return null;
     }
-
     public boolean deletePedido(Long id) {
         Optional<Pedido> existingPedido = pedidoRepository.findById(id);
         if (existingPedido.isPresent()) {
@@ -54,7 +52,6 @@ public class PedidoService {
         }
         return false;
     }
-
 
     private double calcularValorPedido(Pedido pedido) {
         double totalValue = 0.0;
