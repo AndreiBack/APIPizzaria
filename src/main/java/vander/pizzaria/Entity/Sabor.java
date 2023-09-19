@@ -18,5 +18,4 @@ public class Sabor {
     String nome;
     @Column(name = "ingredientes", nullable = false)
     List<String> ingredientes;
-
 }
