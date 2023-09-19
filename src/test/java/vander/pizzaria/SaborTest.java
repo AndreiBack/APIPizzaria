@@ -1,15 +1,19 @@
 package vander.pizzaria;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import vander.pizzaria.DTO.SaborDTO;
 import vander.pizzaria.Entity.Sabor;
 import vander.pizzaria.Repository.SaborRepository;
 import vander.pizzaria.Service.SaborService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 
 public class SaborTest {
@@ -33,45 +37,44 @@ public class SaborTest {
 
         when(saborRepository.findAll()).thenReturn(sabores);
 
-        List<Sabor> result = saborService.getAllSabores();
+        List<SaborDTO> result = saborService.getAll();
 
         assert result.size() == sabores.size();
     }
 
     @Test
     public void testCreateSabor() {
+        SaborDTO saborDTO = new SaborDTO(null, "Sabor de Teste", List.of("Ingrediente 1", "Ingrediente 2"));
         Sabor sabor = new Sabor();
-        sabor.setNome("Sabor de Teste");
-        List<String> ingredientes = new ArrayList<>();
-        ingredientes.add("Ingrediente 1");
-        ingredientes.add("Ingrediente 2");
-        sabor.setIngredientes(ingredientes);
+        sabor.setId(1L);
+        sabor.setNome(saborDTO.getNome());
+        sabor.setIngredientes(saborDTO.getIngredientes());
 
         when(saborRepository.save(any(Sabor.class))).thenReturn(sabor);
 
-        Sabor result = saborService.createSabor(sabor);
+        SaborDTO result = saborService.create(saborDTO);
 
         assert result != null;
+        assert result.getId().equals(1L);
     }
 
     @Test
     public void testUpdateSabor() {
         Long id = 1L;
+        SaborDTO saborDTO = new SaborDTO(id, "Sabor Atualizado", List.of("Ingrediente 1", "Ingrediente 2"));
         Sabor sabor = new Sabor();
         sabor.setId(id);
-        sabor.setNome("Sabor Atualizado");
-        List<String> ingredientes = new ArrayList<>();
-        ingredientes.add("Ingrediente 1");
-        ingredientes.add("Ingrediente 2");
-        sabor.setIngredientes(ingredientes);
+        sabor.setNome(saborDTO.getNome());
+        sabor.setIngredientes(saborDTO.getIngredientes());
 
         when(saborRepository.findById(id)).thenReturn(Optional.of(sabor));
         when(saborRepository.save(any(Sabor.class))).thenReturn(sabor);
 
-        Sabor updatedSabor = saborService.updateSabor(id, sabor);
+        SaborDTO updatedSabor = saborService.update(id, saborDTO);
 
         assert updatedSabor != null;
         assert updatedSabor.getId().equals(id);
+        assert updatedSabor.getNome().equals("Sabor Atualizado");
     }
 
     @Test
@@ -82,7 +85,7 @@ public class SaborTest {
 
         when(saborRepository.findById(id)).thenReturn(Optional.of(sabor));
 
-        boolean result = saborService.deleteSabor(id);
+        boolean result = saborService.delete(id);
 
         assert result;
     }

@@ -14,9 +14,13 @@ import static org.junit.Assert.assertEquals;
         private int idade;
         private String cpf;
         private String email;
+        private String senha;
         private String telefone;
 
+    public ClienteDTO() {
+
     }
+}
 
 
 

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vander.pizzaria.Entity.Sabor;
+import vander.pizzaria.DTO.SaborDTO;
 import vander.pizzaria.Service.SaborService;
 
 import java.util.List;
@@ -21,20 +21,20 @@ public class SaborController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Sabor>> getAllSabores() {
-        List<Sabor> sabores = saborService.getAllSabores();
+    public ResponseEntity<List<SaborDTO>> getAllSabores() {
+        List<SaborDTO> sabores = saborService.getAll();
         return new ResponseEntity<>(sabores, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Sabor> createSabor(@RequestBody Sabor sabor) {
-        Sabor createdSabor = saborService.createSabor(sabor);
+    public ResponseEntity<SaborDTO> createSabor(@RequestBody SaborDTO saborDTO) {
+        SaborDTO createdSabor = saborService.create(saborDTO);
         return new ResponseEntity<>(createdSabor, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sabor> updateSabor(@PathVariable Long id, @RequestBody Sabor sabor) {
-        Sabor updatedSabor = saborService.updateSabor(id, sabor);
+    public ResponseEntity<SaborDTO> updateSabor(@PathVariable Long id, @RequestBody SaborDTO saborDTO) {
+        SaborDTO updatedSabor = saborService.update(id, saborDTO);
         if (updatedSabor != null) {
             return new ResponseEntity<>(updatedSabor, HttpStatus.OK);
         } else {
@@ -44,7 +44,7 @@ public class SaborController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSabor(@PathVariable Long id) {
-        boolean deleted = saborService.deleteSabor(id);
+        boolean deleted = saborService.delete(id);
         if (deleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

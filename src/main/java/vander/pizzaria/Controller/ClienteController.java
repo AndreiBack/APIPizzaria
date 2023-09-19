@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vander.pizzaria.DTO.ClienteDTO;
 import vander.pizzaria.Entity.Cliente;
 import vander.pizzaria.Service.ClienteService;
 
@@ -29,13 +30,13 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<Void> createCliente(@RequestBody ClienteDTO cliente) {
         clienteService.create(cliente);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<Void> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO cliente) {
         clienteService.update(id, cliente);
         return new ResponseEntity<>(HttpStatus.OK);
     }
