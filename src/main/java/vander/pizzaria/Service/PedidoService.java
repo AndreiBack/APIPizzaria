@@ -56,12 +56,10 @@ public class PedidoService {
     private double calcularValorPedido(Pedido pedido) {
         double totalValue = 0.0;
 
-        // Somar valores das pizzas
         for (Pizza pizza : pedido.getPizzas()) {
             totalValue += pizza.getValor();
         }
 
-        // Somar valores dos produtos
         for (Produto produto : pedido.getProdutos()) {
             totalValue += produto.getValorTotal();
         }

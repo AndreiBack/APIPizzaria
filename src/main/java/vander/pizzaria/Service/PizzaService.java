@@ -50,7 +50,7 @@ public class PizzaService {
         return false;
     }
 
-    private boolean QuantSabor(Pizza pizza) {
+    public boolean QuantSabor(Pizza pizza) {
         String tamanho = pizza.getTamanho();
         List<Sabor> sabores = pizza.getSabores();
 

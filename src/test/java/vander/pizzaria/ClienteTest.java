@@ -1,5 +1,4 @@
 package vander.pizzaria;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -9,18 +8,15 @@ import org.springframework.util.Assert;
 import vander.pizzaria.Entity.Cliente;
 import vander.pizzaria.Repository.ClienteRepository;
 import vander.pizzaria.Service.ClienteService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.Mockito.*;
 
 public class ClienteTest {
 
     @Mock
     private ClienteRepository clienteRepository;
-
     @InjectMocks
     private ClienteService clienteService;
 
@@ -34,11 +30,8 @@ public class ClienteTest {
         Long id = 1L;
         Cliente cliente = new Cliente();
         cliente.setId(id);
-
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-
         Cliente result = clienteService.findById(id);
-
         Assert.isTrue(result.getId().equals(id), "Cliente encontrado incorretamente");
     }
 
@@ -47,11 +40,8 @@ public class ClienteTest {
         List<Cliente> clientes = new ArrayList<>();
         clientes.add(new Cliente());
         clientes.add(new Cliente());
-
         when(clienteRepository.findAll()).thenReturn(clientes);
-
         List<Cliente> result = clienteService.findAll();
-
         Assert.isTrue(result.size() == clientes.size(), "Número incorreto de clientes encontrados");
     }
     @Test
@@ -89,10 +79,7 @@ public class ClienteTest {
         Long id = 1L;
         Cliente cliente = new Cliente();
         cliente.setId(id);
-
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-
         clienteService.delete(id);
-
     }
 }
