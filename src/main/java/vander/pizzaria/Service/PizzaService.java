@@ -56,11 +56,11 @@ public class PizzaService {
 
         if (tamanho.equalsIgnoreCase("P") && sabores.size() != 1) {
             return false;
-        } else if (tamanho.equalsIgnoreCase("M") && sabores.size() > 2) {
+        } else if (tamanho.equalsIgnoreCase("M") && sabores.size() >= 2) {
             return false;
-        } else if (tamanho.equalsIgnoreCase("G") && sabores.size() > 3) {
+        } else if (tamanho.equalsIgnoreCase("G") && sabores.size() >= 3) {
             return false;
-        } else if (tamanho.equalsIgnoreCase("GG") && sabores.size() > 4) {
+        } else if (tamanho.equalsIgnoreCase("GG") && sabores.size() >= 4) {
             return false;
         }
         return true;

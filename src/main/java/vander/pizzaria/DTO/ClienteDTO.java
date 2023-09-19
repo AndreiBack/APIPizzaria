@@ -2,6 +2,9 @@ package vander.pizzaria.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +17,6 @@ import lombok.Data;
         private String telefone;
 
     }
+
 
 

@@ -47,12 +47,12 @@ public class ClienteTest {
     @Test
     public void testCreate() {
         Cliente cliente = new Cliente();
-        cliente.setNome("Nome do Cliente");
+        cliente.setNome("obrabo");
         cliente.setIdade(30);
-        cliente.setCpf("12345678901");
+        cliente.setCpf("123.456.789-09");
         cliente.setEmail("cliente@example.com");
         cliente.setSenha("senha123");
-        cliente.setTelefone("123-456-7890");
+        cliente.setTelefone("(45)99834-7219");
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
         clienteService.create(cliente);
     }
@@ -63,12 +63,12 @@ public class ClienteTest {
         Long id = 1L;
         Cliente cliente = new Cliente();
         cliente.setId(id);
-        cliente.setNome("Nome do Cliente");
+        cliente.setNome("vanderlei");
         cliente.setIdade(30);
-        cliente.setCpf("12345678901");
+        cliente.setCpf("128.876.789-99");
         cliente.setEmail("cliente@example.com");
         cliente.setSenha("senha123");
-        cliente.setTelefone("123-456-7890");
+        cliente.setTelefone("(45)99834-7219");
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
         clienteService.update(id, cliente);
     }
@@ -82,4 +82,5 @@ public class ClienteTest {
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
         clienteService.delete(id);
     }
+
 }

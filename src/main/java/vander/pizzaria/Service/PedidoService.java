@@ -53,7 +53,7 @@ public class PedidoService {
         return false;
     }
 
-    private double calcularValorPedido(Pedido pedido) {
+    public double calcularValorPedido(Pedido pedido) {
         double totalValue = 0.0;
 
         for (Pizza pizza : pedido.getPizzas()) {

@@ -5,11 +5,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import vander.pizzaria.Entity.Pedido;
+import vander.pizzaria.Entity.Pizza;
+import vander.pizzaria.Entity.Produto;
 import vander.pizzaria.Repository.PedidoRepository;
 import vander.pizzaria.Service.PedidoService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class PedidoTest {
@@ -41,9 +45,9 @@ public class PedidoTest {
     @Test
     public void testCreatePedido() {
         Pedido pedido = new Pedido();
-        pedido.setQuantidade(2); // Exemplo de quantidade
-        pedido.setPizzas(new ArrayList<>()); // Exemplo de lista de pizzas
-        pedido.setProdutos(new ArrayList<>()); // Exemplo de lista de produtos
+        pedido.setQuantidade(2);
+        pedido.setPizzas(new ArrayList<>());
+        pedido.setProdutos(new ArrayList<>());
 
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(pedido);
 
@@ -81,5 +85,35 @@ public class PedidoTest {
         boolean result = pedidoService.deletePedido(id);
 
         assert result;
+    }
+    @Test
+    public void testCalcularValorPedido() {
+        Pedido pedido = new Pedido();
+
+        List<Pizza> pizzas = new ArrayList<>();
+        List<Produto> produtos = new ArrayList<>();
+
+        Pizza pizza1 = new Pizza();
+        pizza1.setValor(10.0);
+        pizzas.add(pizza1);
+
+        Pizza pizza2 = new Pizza();
+        pizza2.setValor(15.0);
+        pizzas.add(pizza2);
+
+        Produto produto1 = new Produto();
+        produto1.setValorTotal(5.0);
+        produtos.add(produto1);
+
+        Produto produto2 = new Produto();
+        produto2.setValorTotal(8.0);
+        produtos.add(produto2);
+
+        pedido.setPizzas(pizzas);
+        pedido.setProdutos(produtos);
+
+        double valorTotal = pedidoService.calcularValorPedido(pedido);
+
+        assertEquals(38.0, valorTotal, 0.01); // Use delta para lidar com possíveis erros de arredondamento
     }
 }

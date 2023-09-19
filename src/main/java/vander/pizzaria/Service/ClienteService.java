@@ -50,6 +50,10 @@ public class ClienteService {
         Assert.notNull(cliente.getIdade(), "Idade não pode ser nula!");
         Assert.isTrue(cliente.getIdade() > 0, "Idade não pode ser negativa!");
 
+        Assert.isTrue(cliente.getCpf().matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"), "cpf invalido");
+
+        Assert.isTrue(cliente.getTelefone().matches("\\(\\d{2}\\)\\d{5}-\\d{4}"), "telefone invalido");
+
         Assert.notNull(cliente.getEmail(), "Email não pode ser nulo!");
         Assert.isTrue(!cliente.getEmail().isBlank(), "Deve conter email!");
         Assert.isTrue(cliente.getEmail().matches("[a-zA-Z0-9]+@[a-z]+[.]{1}[a-z]+"), "Formato do email inválido!");
