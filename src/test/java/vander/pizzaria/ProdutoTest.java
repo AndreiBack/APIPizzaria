@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import vander.pizzaria.DTO.ProdutoDTO;
-import vander.pizzaria.Entity.Produto;
-import vander.pizzaria.Repository.ProdutoRepository;
-import vander.pizzaria.Service.ProdutoService;
+import vander.pizzaria.dto.ProdutoDTO;
+import vander.pizzaria.entity.Produto;
+import vander.pizzaria.repository.ProdutoRepository;
+import vander.pizzaria.service.ProdutoService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-public class ProdutoTest {
+ class ProdutoTest {
 
     @Mock
     private ProdutoRepository produtoRepository;
@@ -25,22 +25,22 @@ public class ProdutoTest {
     private ProdutoService produtoService;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void setUp(){MockitoAnnotations.openMocks(this);}
 
     @Test
-    public void testGetAllProdutos() {
+     void testGetAllProdutos() {
         List<Produto> produtos = new ArrayList<>();
         produtos.add(new Produto());
         produtos.add(new Produto());
         when(produtoRepository.findAll()).thenReturn(produtos);
         List<ProdutoDTO> result = produtoService.getAll();
         assert result.size() == produtos.size();
+       verify(produtoRepository, times(0)).save(any(Produto.class));
+
     }
 
     @Test
-    public void testCreateProduto() {
+     void testCreateProduto() {
         ProdutoDTO produtoDTO = new ProdutoDTO();
         produtoDTO.setNome("Produto de Teste");
         produtoDTO.setDescricao("Descrição do Produto de Teste");
@@ -57,10 +57,12 @@ public class ProdutoTest {
         ProdutoDTO result = produtoService.create(produtoDTO);
         assert result != null;
         assert result.getId().equals(produto.getId());
+       verify(produtoRepository, times(1)).save(any(Produto.class));
+
     }
 
     @Test
-    public void testUpdateProduto() {
+     void testUpdateProduto() {
         Long id = 1L;
 
         ProdutoDTO produtoDTO = new ProdutoDTO();
@@ -81,15 +83,19 @@ public class ProdutoTest {
         ProdutoDTO updatedProduto = produtoService.update(id, produtoDTO);
         assert updatedProduto != null;
         assert updatedProduto.getId().equals(id);
+       verify(produtoRepository, times(1)).save(any(Produto.class));
+
     }
 
     @Test
-    public void testDeleteProduto() {
+     void testDeleteProduto() {
         Long id = 1L;
         Produto produto = new Produto();
         produto.setId(id);
         when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
         boolean result = produtoService.delete(id);
         assert result;
+       verify(produtoRepository, times(0)).save(any(Produto.class));
+
     }
 }

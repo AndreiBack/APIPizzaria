@@ -5,14 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import vander.pizzaria.Controller.ClienteController;
-import vander.pizzaria.DTO.ClienteDTO;
-import vander.pizzaria.Entity.Cliente;
-import vander.pizzaria.Repository.ClienteRepository;
-import vander.pizzaria.Service.ClienteService;
+import vander.pizzaria.dto.ClienteDTO;
+import vander.pizzaria.entity.Cliente;
+import vander.pizzaria.repository.ClienteRepository;
+import vander.pizzaria.service.ClienteService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,44 +17,43 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
-public class ClienteTest {
+ class ClienteTest {
 
     @Mock
     private ClienteRepository clienteRepository;
-    @InjectMocks
-    private ClienteController clienteController;
 
     @InjectMocks
     private ClienteService clienteService;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void setUp(){MockitoAnnotations.openMocks(this);}
 
     @Test
-    public void testFindById() {
+     void testFindById() {
         Long id = 1L;
         Cliente cliente = new Cliente();
         cliente.setId(id);
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
         Cliente result = clienteService.findById(id);
         Assert.isTrue(result.getId().equals(id), "Cliente encontrado incorretamente");
+       verify(clienteRepository, times(0)).save(any(Cliente.class));
+
     }
 
     @Test
-    public void testFindAll() {
+     void testFindAll() {
         List<Cliente> clientes = new ArrayList<>();
         clientes.add(new Cliente());
         clientes.add(new Cliente());
         when(clienteRepository.findAll()).thenReturn(clientes);
         List<Cliente> result = clienteService.findAll();
         Assert.isTrue(result.size() == clientes.size(), "Número incorreto de clientes encontrados");
+       verify(clienteRepository, times(0)).save(any(Cliente.class));
+
     }
 
     @Test
-    public void testCreate() {
+     void testCreate() {
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setNome("obrabo");
         clienteDTO.setIdade(30);
@@ -76,10 +72,11 @@ public class ClienteTest {
 
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
         clienteService.create(clienteDTO);
+       verify(clienteRepository, times(1)).save(any(Cliente.class));
     }
 
     @Test
-    public void testUpdate() {
+     void testUpdate() {
         Long id = 1L;
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setId(id);
@@ -101,19 +98,23 @@ public class ClienteTest {
 
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
         clienteService.update(id, clienteDTO);
+       verify(clienteRepository, times(1)).save(any(Cliente.class));
+
     }
 
     @Test
-    public void testDelete() {
+     void testDelete() {
         Long id = 1L;
         Cliente cliente = new Cliente();
         cliente.setId(id);
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
         clienteService.delete(id);
+       verify(clienteRepository, times(0)).save(any(Cliente.class));
+
     }
 
     @Test
-    public void testSetters() {
+     void testSetters() {
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setNome("obrabo");
         clienteDTO.setIdade(30);

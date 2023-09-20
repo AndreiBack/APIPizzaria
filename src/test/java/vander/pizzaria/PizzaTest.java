@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import vander.pizzaria.DTO.PizzaDTO;
-import vander.pizzaria.DTO.SaborDTO;
-import vander.pizzaria.Entity.Pizza;
-import vander.pizzaria.Entity.Sabor;
-import vander.pizzaria.Repository.PizzaRepository;
-import vander.pizzaria.Service.PizzaService;
+import vander.pizzaria.dto.PizzaDTO;
+import vander.pizzaria.dto.SaborDTO;
+import vander.pizzaria.entity.Pizza;
+import vander.pizzaria.entity.Sabor;
+import vander.pizzaria.repository.PizzaRepository;
+import vander.pizzaria.service.PizzaService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class PizzaTest {
+ class PizzaTest {
 
     @Mock
     private PizzaRepository pizzaRepository;
@@ -29,12 +29,10 @@ public class PizzaTest {
     private PizzaService pizzaService;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+     void setUp() {MockitoAnnotations.openMocks(this);}
 
     @Test
-    public void testGetAllPizzas() {
+     void testGetAllPizzas() {
         List<Pizza> pizzas = new ArrayList<>();
         Pizza pizza1 = new Pizza();
         pizza1.setSabores(new ArrayList<>());
@@ -44,11 +42,13 @@ public class PizzaTest {
         when(pizzaRepository.findAll()).thenReturn(pizzas);
         List<PizzaDTO> result = pizzaService.getAll();
         assert result.size() == pizzas.size();
+       verify(pizzaRepository, times(0)).save(any(Pizza.class));
+
     }
 
 
     @Test
-    public void testCreatePizza() {
+     void testCreatePizza() {
         PizzaDTO pizzaDTO = new PizzaDTO();
         pizzaDTO.setValor(20.0);
         pizzaDTO.setTamanho("M");
@@ -57,10 +57,12 @@ public class PizzaTest {
         when(pizzaRepository.save(any(Pizza.class))).thenReturn(pizza);
         PizzaDTO result = pizzaService.create(pizzaDTO);
         assert result != null;
+       verify(pizzaRepository, times(1)).save(any(Pizza.class));
+
     }
 
     @Test
-    public void testUpdatePizza() {
+     void testUpdatePizza() {
         Long id = 1L;
         PizzaDTO pizzaDTO = new PizzaDTO();
         pizzaDTO.setId(id);
@@ -73,20 +75,24 @@ public class PizzaTest {
         PizzaDTO updatedPizza = pizzaService.update(id, pizzaDTO);
         assert updatedPizza != null;
         assert updatedPizza.getId().equals(id);
+       verify(pizzaRepository, times(1)).save(any(Pizza.class));
+
     }
 
     @Test
-    public void testDeletePizza() {
+     void testDeletePizza() {
         Long id = 1L;
         Pizza pizza = new Pizza();
         pizza.setId(id);
         when(pizzaRepository.findById(id)).thenReturn(Optional.of(pizza));
         boolean result = pizzaService.delete(id);
         assert result;
+       verify(pizzaRepository, times(0)).save(any(Pizza.class));
+
     }
 
     @Test
-    public void testQuantSabor() {
+     void testQuantSabor() {
         Pizza pizzaP = new Pizza();
         pizzaP.setTamanho("P");
         List<Sabor> saboresP = new ArrayList<>();
@@ -154,42 +160,35 @@ public class PizzaTest {
         assertFalse(pizzaService.quantidadeSabor(pizzaGG2));
     }
     @Test
-    public void testConvertToSabor() {
-        // Crie um objeto SaborDTO
+     void testConvertToSabor() {
         SaborDTO saborDTO = new SaborDTO();
         saborDTO.setId(1L);
         saborDTO.setNome("Sabor Teste");
         List<String> ingredientes = Arrays.asList("Ingrediente 1", "Ingrediente 2");
         saborDTO.setIngredientes(ingredientes);
 
-        // Chame o método para converter para Sabor
         Sabor sabor = convertToSabor(saborDTO);
 
-        // Verifique se os campos foram convertidos corretamente
         assertEquals(sabor.getId(), saborDTO.getId());
         assertEquals(sabor.getNome(), saborDTO.getNome());
         assertEquals(sabor.getIngredientes(), saborDTO.getIngredientes());
     }
 
     @Test
-    public void testConvertToSaborDTO() {
-        // Crie um objeto Sabor
+     void testConvertToSaborDTO() {
         Sabor sabor = new Sabor();
         sabor.setId(1L);
         sabor.setNome("Sabor Teste");
         List<String> ingredientes = Arrays.asList("Ingrediente 1", "Ingrediente 2");
         sabor.setIngredientes(ingredientes);
 
-        // Chame o método para converter para SaborDTO
         SaborDTO saborDTO = convertToSaborDTO(sabor);
 
-        // Verifique se os campos foram convertidos corretamente
         assertEquals(saborDTO.getId(), sabor.getId());
         assertEquals(saborDTO.getNome(), sabor.getNome());
         assertEquals(saborDTO.getIngredientes(), sabor.getIngredientes());
     }
 
-    // Substitua esses métodos pelos métodos reais em seu código
 
     private Sabor convertToSabor(SaborDTO saborDTO) {
         Sabor sabor = new Sabor();

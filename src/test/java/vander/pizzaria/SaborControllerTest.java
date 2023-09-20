@@ -5,29 +5,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import vander.pizzaria.DTO.SaborDTO;
-import vander.pizzaria.Entity.Sabor;
-import vander.pizzaria.Repository.SaborRepository;
-import vander.pizzaria.Service.SaborService;
+import vander.pizzaria.dto.SaborDTO;
+import vander.pizzaria.entity.Sabor;
+import vander.pizzaria.repository.SaborRepository;
+import vander.pizzaria.service.SaborService;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SaborControllerTest {
+ class SaborControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +43,7 @@ public class SaborControllerTest {
     }
 
     @Test
-    public void testCreateSabor() throws Exception {
+     void testCreateSabor() throws Exception {
         SaborDTO saborDTO = new SaborDTO();
         saborDTO.setNome("Sabor de Teste");
         saborDTO.setIngredientes(List.of("Ingrediente 1", "Ingrediente 2"));
@@ -58,14 +57,14 @@ public class SaborControllerTest {
         result.andExpect(status().isCreated());
     }
     @Test
-    public void testGetAllSabores() throws Exception {
+     void testGetAllSabores() throws Exception {
         ResultActions result = mockMvc.perform(get("/sabores"));
         result.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void testDeleteSaborService() {
+     void testDeleteSaborService() {
         Long id = 1L;
 
         when(saborRepository.existsById(id)).thenReturn(true);
@@ -74,6 +73,9 @@ public class SaborControllerTest {
         boolean result = saborService.delete(id);
 
         assert result;
+       verify(saborRepository, times(0)).save(any(Sabor.class));
+
+
     }
 }
 

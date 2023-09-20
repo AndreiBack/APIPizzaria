@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import vander.pizzaria.Entity.Pedido;
-import vander.pizzaria.Entity.Pizza;
-import vander.pizzaria.Entity.Produto;
-import vander.pizzaria.Repository.PedidoRepository;
-import vander.pizzaria.Service.PedidoService;
+import vander.pizzaria.entity.Pedido;
+import vander.pizzaria.entity.Pizza;
+import vander.pizzaria.entity.Produto;
+import vander.pizzaria.repository.PedidoRepository;
+import vander.pizzaria.service.PedidoService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class PedidoTest {
+ class PedidoTest {
 
     @Mock
     private PedidoRepository pedidoRepository;
@@ -25,12 +25,10 @@ public class PedidoTest {
     private PedidoService pedidoService;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void setUp(){MockitoAnnotations.openMocks(this);}
 
     @Test
-    public void testGetAllPedidos() {
+     void testGetAllPedidos() {
         List<Pedido> pedidos = new ArrayList<>();
         pedidos.add(new Pedido());
         pedidos.add(new Pedido());
@@ -40,10 +38,12 @@ public class PedidoTest {
         List<Pedido> result = pedidoService.getAllPedidos();
 
         assert result.size() == pedidos.size();
+       verify(pedidoRepository, times(0)).save(any(Pedido.class));
+
     }
 
     @Test
-    public void testCreatePedido() {
+     void testCreatePedido() {
         Pedido pedido = new Pedido();
         pedido.setQuantidade(2);
         pedido.setPizzas(new ArrayList<>());
@@ -54,16 +54,18 @@ public class PedidoTest {
         Pedido result = pedidoService.createPedido(pedido);
 
         assert result != null;
+       verify(pedidoRepository, times(1)).save(any(Pedido.class));
+
     }
 
     @Test
-    public void testUpdatePedido() {
+     void testUpdatePedido() {
         Long id = 1L;
         Pedido pedido = new Pedido();
         pedido.setId(id);
-        pedido.setQuantidade(2); // Exemplo de quantidade
-        pedido.setPizzas(new ArrayList<>()); // Exemplo de lista de pizzas
-        pedido.setProdutos(new ArrayList<>()); // Exemplo de lista de produtos
+        pedido.setQuantidade(2);
+        pedido.setPizzas(new ArrayList<>());
+        pedido.setProdutos(new ArrayList<>());
 
         when(pedidoRepository.findById(id)).thenReturn(Optional.of(pedido));
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(pedido);
@@ -72,10 +74,12 @@ public class PedidoTest {
 
         assert updatedPedido != null;
         assert updatedPedido.getId().equals(id);
+       verify(pedidoRepository, times(1)).save(any(Pedido.class));
+
     }
 
     @Test
-    public void testDeletePedido() {
+     void testDeletePedido() {
         Long id = 1L;
         Pedido pedido = new Pedido();
         pedido.setId(id);
@@ -85,9 +89,11 @@ public class PedidoTest {
         boolean result = pedidoService.deletePedido(id);
 
         assert result;
+       verify(pedidoRepository, times(0)).save(any(Pedido.class));
+
     }
     @Test
-    public void testCalcularValorPedido() {
+     void testCalcularValorPedido() {
         Pedido pedido = new Pedido();
 
         List<Pizza> pizzas = new ArrayList<>();
@@ -114,6 +120,6 @@ public class PedidoTest {
 
         double valorTotal = pedidoService.calcularValorPedido(pedido);
 
-        assertEquals(38.0, valorTotal, 0.01); // Use delta para lidar com possíveis erros de arredondamento
+        assertEquals(38.0, valorTotal, 0.01);
     }
 }

@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import vander.pizzaria.Entity.Endereco;
-import vander.pizzaria.Repository.EnderecoRepository;
-import vander.pizzaria.Service.EnderecoService;
+import vander.pizzaria.entity.Endereco;
+import vander.pizzaria.repository.EnderecoRepository;
+import vander.pizzaria.service.EnderecoService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.mockito.Mockito.*;
 
-public class EnderecoTest {
+ class EnderecoTest {
 
     @Mock
     private EnderecoRepository enderecoRepository;
@@ -21,32 +21,34 @@ public class EnderecoTest {
     private EnderecoService enderecoService;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void setUp(){MockitoAnnotations.openMocks(this);}
 
     @Test
-    public void testFindById() {
+     void testFindById() {
         Long id = 1L;
         Endereco endereco = new Endereco();
         endereco.setId(id);
         when(enderecoRepository.findById(id)).thenReturn(Optional.of(endereco));
         Endereco result = enderecoService.findById(id);
         assert result.getId().equals(id);
+       verify(enderecoRepository, times(0)).save(any(Endereco.class));
+
     }
 
     @Test
-    public void testFindAll() {
+     void testFindAll() {
         List<Endereco> enderecos = new ArrayList<>();
         enderecos.add(new Endereco());
         enderecos.add(new Endereco());
         when(enderecoRepository.findAll()).thenReturn(enderecos);
         List<Endereco> result = enderecoService.findAll();
         assert result.size() == enderecos.size();
+       verify(enderecoRepository, times(0)).save(any(Endereco.class));
+
     }
 
     @Test
-    public void testCreate() {
+     void testCreate() {
         Endereco endereco = new Endereco();
         endereco.setCep("12345-678");
         endereco.setRua("Rua da Amostra");
@@ -54,10 +56,12 @@ public class EnderecoTest {
         endereco.setNumero(123);
         when(enderecoRepository.save(any(Endereco.class))).thenReturn(endereco);
         enderecoService.create(endereco);
+
+       verify(enderecoRepository, times(1)).save(any(Endereco.class));
     }
 
     @Test
-    public void testUpdate() {
+     void testUpdate() {
         Long id = 1L;
         Endereco endereco = new Endereco();
         endereco.setId(id);
@@ -67,14 +71,18 @@ public class EnderecoTest {
         endereco.setNumero(123);
         when(enderecoRepository.findById(id)).thenReturn(Optional.of(endereco));
         enderecoService.update(id, endereco);
+       verify(enderecoRepository, times(1)).save(any(Endereco.class));
+
     }
 
     @Test
-    public void testDelete() {
+     void testDelete() {
         Long id = 1L;
         Endereco endereco = new Endereco();
         endereco.setId(id);
         when(enderecoRepository.findById(id)).thenReturn(Optional.of(endereco));
         enderecoService.delete(id);
+       verify(enderecoRepository, times(0)).save(any(Endereco.class));
+
     }
 }

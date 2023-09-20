@@ -5,41 +5,30 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import vander.pizzaria.Controller.SaborController;
-import vander.pizzaria.DTO.SaborDTO;
-import vander.pizzaria.Entity.Sabor;
-import vander.pizzaria.Repository.SaborRepository;
-import vander.pizzaria.Service.SaborService;
-
+import vander.pizzaria.dto.SaborDTO;
+import vander.pizzaria.entity.Sabor;
+import vander.pizzaria.repository.SaborRepository;
+import vander.pizzaria.service.SaborService;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class SaborTest {
+ class SaborTest {
 
     @Mock
     private SaborRepository saborRepository;
 
     @InjectMocks
-    private SaborController saborController;
-
-    @InjectMocks
     private SaborService saborService;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void setUp(){MockitoAnnotations.openMocks(this);}
+
 
     @Test
-    public void testGetAllSabores() {
+     void testGetAllSabores() {
         List<Sabor> sabores = new ArrayList<>();
         sabores.add(new Sabor());
         sabores.add(new Sabor());
@@ -49,10 +38,13 @@ public class SaborTest {
         List<SaborDTO> result = saborService.getAll();
 
         assert result.size() == sabores.size();
+       verify(saborRepository, times(0)).save(any(Sabor.class));
+
+
     }
 
     @Test
-    public void testCreateSabor() {
+     void testCreateSabor() {
         SaborDTO saborDTO = new SaborDTO(null, "Sabor de Teste", List.of("Ingrediente 1", "Ingrediente 2"));
         Sabor sabor = new Sabor();
         sabor.setId(1L);
@@ -65,10 +57,12 @@ public class SaborTest {
 
         assert result != null;
         assert result.getId().equals(1L);
+       verify(saborRepository, times(1)).save(any(Sabor.class));
+
     }
 
     @Test
-    public void testUpdateSabor() {
+     void testUpdateSabor() {
         Long id = 1L;
         SaborDTO saborDTO = new SaborDTO(id, "Sabor Atualizado", List.of("Ingrediente 1", "Ingrediente 2"));
         Sabor sabor = new Sabor();
@@ -84,10 +78,12 @@ public class SaborTest {
         assert updatedSabor != null;
         assert updatedSabor.getId().equals(id);
         assert updatedSabor.getNome().equals("Sabor Atualizado");
+       verify(saborRepository, times(1)).save(any(Sabor.class));
+
     }
 
     @Test
-    public void testDeleteSabor() {
+     void testDeleteSabor() {
         Long id = 1L;
         Sabor sabor = new Sabor();
         sabor.setId(id);
@@ -97,10 +93,12 @@ public class SaborTest {
         boolean result = saborService.delete(id);
 
         assert result;
+       verify(saborRepository, times(0)).save(any(Sabor.class));
+
     }
 
     @Test
-    public void testSaborDTO() {
+     void testSaborDTO() {
 
         SaborDTO saborDTO = new SaborDTO(1L, "Margarita", List.of("Molho de Tomate", "Queijo"));
 
