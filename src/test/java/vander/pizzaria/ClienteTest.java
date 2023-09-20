@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.util.Assert;
 import vander.pizzaria.dto.ClienteDTO;
 import vander.pizzaria.entity.Cliente;
@@ -16,131 +17,114 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
  class ClienteTest {
-
-    @Mock
-    private ClienteRepository clienteRepository;
-
     @InjectMocks
-    private ClienteService clienteService;
-
+    ClienteService service;
+    @Mock
+    ClienteRepository repository;
+    @Mock
+    ModelMapper modelMapper;
     @BeforeEach
-    public void setUp(){MockitoAnnotations.openMocks(this);}
-
-    @Test
-     void testFindById() {
-        Long id = 1L;
-        Cliente cliente = new Cliente();
-        cliente.setId(id);
-        when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-        ClienteDTO result = clienteService.findById(id);
-        Assert.isTrue(result.getId().equals(id), "Cliente encontrado incorretamente");
-       verify(clienteRepository, times(0)).save(any(Cliente.class));
-
+    void setUp() {
+       MockitoAnnotations.openMocks(this);
     }
 
     @Test
-     void testFindAll() {
-        List<Cliente> clientes = new ArrayList<>();
-        clientes.add(new Cliente());
-        clientes.add(new Cliente());
-        when(clienteRepository.findAll()).thenReturn(clientes);
-        List<ClienteDTO> result = clienteService.findAll();
-        Assert.isTrue(result.size() == clientes.size(), "Número incorreto de clientes encontrados");
-       verify(clienteRepository, times(0)).save(any(Cliente.class));
-
+    void findById() {
+       Long id = 1L;
+       Cliente cliente = new Cliente();
+       cliente.setId(id);
+       cliente.setNome("John Doe");
+       ClienteDTO expectedDto = new ClienteDTO();
+       expectedDto.setId(id);
+       expectedDto.setNome("John Doe");
+       when(repository.findById(id)).thenReturn(Optional.of(cliente));
+       when(modelMapper.map(cliente, ClienteDTO.class)).thenReturn(expectedDto);
+       ClienteDTO result = service.findById(id);
+       assertEquals(expectedDto, result);
     }
 
     @Test
-     void testCreate() {
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setNome("obrabo");
-        clienteDTO.setIdade(30);
-        clienteDTO.setCpf("123.456.789-09");
-        clienteDTO.setEmail("andrei@gmail.com");
-        clienteDTO.setSenha("senha123");
-        clienteDTO.setTelefone("(45)99834-7219");
-
-        Cliente cliente = new Cliente();
-        cliente.setNome(clienteDTO.getNome());
-        cliente.setIdade(clienteDTO.getIdade());
-        cliente.setCpf(clienteDTO.getCpf());
-        cliente.setEmail(clienteDTO.getEmail());
-        cliente.setSenha(clienteDTO.getSenha());
-        cliente.setTelefone(clienteDTO.getTelefone());
-
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
-        clienteService.create(clienteDTO);
-       verify(clienteRepository, times(1)).save(any(Cliente.class));
+    void findAll() {
+       List<Cliente> clientes = new ArrayList<>();
+       clientes.add(new Cliente());
+       clientes.add(new Cliente());
+       List<ClienteDTO> expectedDtos = new ArrayList<>();
+       expectedDtos.add(new ClienteDTO());
+       expectedDtos.add(new ClienteDTO());
+       when(repository.findAll()).thenReturn(clientes);
+       when(modelMapper.map(any(Cliente.class), eq(ClienteDTO.class))).thenReturn(new ClienteDTO());
+       List<ClienteDTO> result = service.findAll();
+       assertEquals(expectedDtos.size(), result.size());
     }
 
     @Test
-     void testUpdate() {
-        Long id = 1L;
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setId(id);
-        clienteDTO.setNome("vanderlei");
-        clienteDTO.setIdade(30);
-        clienteDTO.setCpf("128.876.789-99");
-        clienteDTO.setEmail("andrei@gmail.com");
-        clienteDTO.setSenha("senha123");
-        clienteDTO.setTelefone("(45)99834-7219");
+    void create() {
+       // Arrange
+       ClienteDTO clienteDTO = new ClienteDTO();
+       clienteDTO.setNome("John Doe");
+       clienteDTO.setSenha("password");
+       clienteDTO.setEmail("john@example.com");
+       clienteDTO.setTelefone("123456789");
 
-        Cliente cliente = new Cliente();
-        cliente.setId(clienteDTO.getId());
-        cliente.setNome(clienteDTO.getNome());
-        cliente.setIdade(clienteDTO.getIdade());
-        cliente.setCpf(clienteDTO.getCpf());
-        cliente.setEmail(clienteDTO.getEmail());
-        cliente.setSenha(clienteDTO.getSenha());
-        cliente.setTelefone(clienteDTO.getTelefone());
+       Cliente cliente = new Cliente();
+       cliente.setNome("John Doe");
+       cliente.setSenha("password");
+       cliente.setEmail("john@example.com");
+       cliente.setTelefone("123456789");
 
-        when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-        clienteService.update(id, clienteDTO);
-       verify(clienteRepository, times(1)).save(any(Cliente.class));
+       when(repository.save(any(Cliente.class))).thenReturn(cliente);
 
+       String result = service.create(clienteDTO);
+
+       assertEquals("Sucesso ao cadastrar novo Registro", result);
     }
 
     @Test
-     void testDelete() {
-        Long id = 1L;
-        Cliente cliente = new Cliente();
-        cliente.setId(id);
-        when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-        clienteService.delete(id);
-       verify(clienteRepository, times(0)).save(any(Cliente.class));
+    void update() {
 
+       Long id = 1L;
+       ClienteDTO clienteDTO = new ClienteDTO();
+       clienteDTO.setNome("John Doe");
+       clienteDTO.setSenha("newpassword");
+       clienteDTO.setEmail("newemail@example.com");
+       clienteDTO.setTelefone("987654321");
+
+       Cliente cliente = new Cliente();
+       cliente.setId(id);
+       cliente.setNome("John Doe");
+       cliente.setSenha("newpassword");
+       cliente.setEmail("newemail@example.com");
+       cliente.setTelefone("987654321");
+
+       when(repository.findById(id)).thenReturn(Optional.of(cliente));
+       when(repository.save(any(Cliente.class))).thenReturn(cliente);
+
+
+       String result = service.update(id, clienteDTO);
+
+       assertEquals("Sucesso ao atualizar Registro do ID:" + id + " Cliente", result);
     }
 
     @Test
-     void testSetters() {
-        ClienteDTO clienteDTO = new ClienteDTO();
-        clienteDTO.setNome("obrabo");
-        clienteDTO.setIdade(30);
-        clienteDTO.setCpf("123.456.789-09");
-        clienteDTO.setEmail("andrei@gmail.com");
-        clienteDTO.setSenha("senha123");
-        clienteDTO.setTelefone("(45)99834-7219");
+    void delete() {
 
-        Cliente cliente = new Cliente();
-        cliente.setId(1L);
+       Long id = 1L;
+       Cliente cliente = new Cliente();
+       cliente.setId(id);
+       when(repository.findById(id)).thenReturn(Optional.of(cliente));
+       service.delete(id);
 
-        cliente.setNome(clienteDTO.getNome());
-        cliente.setIdade(clienteDTO.getIdade());
-        cliente.setCpf(clienteDTO.getCpf());
-        cliente.setEmail(clienteDTO.getEmail());
-        cliente.setSenha(clienteDTO.getSenha());
-        cliente.setTelefone(clienteDTO.getTelefone());
-
-
-        assertEquals("obrabo", cliente.getNome());
-        assertEquals(30, cliente.getIdade());
-        assertEquals("123.456.789-09", cliente.getCpf());
-        assertEquals("andrei@gmail.com", cliente.getEmail());
-        assertEquals("senha123", cliente.getSenha());
-        assertEquals("(45)99834-7219", cliente.getTelefone());
+       verify(repository, times(1)).deleteById(id);
+    }
+    @Test
+    void post_Failure() {
+       ClienteDTO clienteDTO = new ClienteDTO();
+       assertThrows(IllegalArgumentException.class, () -> {
+          service.create(clienteDTO);
+       });
     }
 
-
-}
+ }
