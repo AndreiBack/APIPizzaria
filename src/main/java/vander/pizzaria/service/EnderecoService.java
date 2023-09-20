@@ -1,58 +1,66 @@
 package vander.pizzaria.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import vander.pizzaria.dto.EnderecoDTO;
 import vander.pizzaria.entity.Endereco;
 import vander.pizzaria.repository.EnderecoRepository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class EnderecoService {
-
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public Endereco findById(final Long id) {
-        Optional<Endereco> endereco = enderecoRepository.findById(id);
-        if (endereco.isPresent()) {
-            return endereco.get();
-        }
-        throw new RuntimeException("Endereço não encontrado");
+    private Endereco toEndereco(EnderecoDTO enderecoDTO){
+        return modelMapper.map(enderecoDTO, Endereco.class);
     }
-
-    public List<Endereco> findAll() {
-        return enderecoRepository.findAll();
+    private EnderecoDTO toEnderecoDTO(Endereco endereco){
+        return modelMapper.map(endereco, EnderecoDTO.class);
     }
-
+    private void idNotNull(Long id){
+        Assert.notNull(enderecoRepository.findById(id).orElse(null), String.format("ID [%s] não encontrado" , id));
+    }
+    private void validationEnderecoDTO(EnderecoDTO enderecoDTO){
+        Assert.notNull(enderecoDTO.getBairro(), "Informe o Bairro!");
+        Assert.hasText(enderecoDTO.getBairro(), "Informe o Bairro!");
+        Assert.notNull(enderecoDTO.getNumero(), "Informe o Numero!");
+        Assert.notNull(enderecoDTO.getCep(), "Informe o Cep!");
+        Assert.notNull(enderecoDTO.getRua(), "Informe o Rua!");
+        Assert.hasText(enderecoDTO.getRua(), "Informe o Rua!");
+    }
+    public EnderecoDTO findById(Long id){
+        Endereco endereco = enderecoRepository.findById(id).orElse(null);
+        return toEnderecoDTO(endereco);
+    }
+    public List<EnderecoDTO> findAll(){
+        return enderecoRepository.findAll().stream().map(this::toEnderecoDTO).toList();
+    }
     @Transactional(rollbackFor = Exception.class)
-    public void create(final Endereco endereco) {
-        validateEndereco(endereco);
-        enderecoRepository.save(endereco);
+    public String create(EnderecoDTO enderecoDTO){
+        validationEnderecoDTO(enderecoDTO);
+        toEnderecoDTO(enderecoRepository.save(toEndereco(enderecoDTO)));
+        return "Sucesso ao cadastrar novo Registro";
     }
-
     @Transactional(rollbackFor = Exception.class)
-    public void update(final Long id, final Endereco endereco) {
-        Endereco enderecoDatabase = findById(id);
-        Assert.isTrue(enderecoDatabase.getId().equals(endereco.getId()), "Endereços não conferem!");
-        validateEndereco(endereco);
-        enderecoRepository.save(endereco);
+    public String update(Long id, EnderecoDTO enderecoDTO){
+        idNotNull(id);
+        validationEnderecoDTO(enderecoDTO);
+        toEnderecoDTO(enderecoRepository.save(toEndereco(enderecoDTO)));
+        return "Sucesso ao atualizar Registro do ID:" + id + " Cliente";
+    }
+    public void delete(Long id){
+        idNotNull(id);
+        enderecoRepository.deleteById(id);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(final Long id) {
-        Endereco endereco = findById(id);
-        enderecoRepository.delete(endereco);
-    }
 
-    private void validateEndereco(final Endereco endereco) {
-        Assert.isTrue(!endereco.getBairro().isBlank(), "Bairro inválido!");
-        Assert.isTrue(!endereco.getRua().isBlank(), "Rua inválida!");
-        Assert.notNull(endereco.getNumero(), "Número da residência não pode ser nulo!");
-        Assert.isTrue(endereco.getCep().matches("\\d{5}-\\d{3}"), "CEP invalido");
-        Assert.isTrue(endereco.getNumero() > 0, "Número da residência não pode ser negativo!");
-    }
+
 }

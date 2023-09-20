@@ -13,41 +13,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
-
     @Autowired
-    private ClienteService clienteService;
-    @Autowired
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
-    }
+    private  ClienteService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getCliente(@PathVariable Long id) {
-        Cliente cliente = clienteService.findById(id);
-        return new ResponseEntity<>(cliente, HttpStatus.OK);
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Long id) {
+        ClienteDTO clienteDTO = service.findById(id);
+        return ResponseEntity.ok(clienteDTO);
     }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = clienteService.findAll();
-        return new ResponseEntity<>(clientes, HttpStatus.OK);
+    public ResponseEntity<List<ClienteDTO>> getAllClientes() {
+        List<ClienteDTO> clienteDTOs = service.findAll();
+        return ResponseEntity.ok(clienteDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCliente(@RequestBody ClienteDTO cliente) {
-        clienteService.create(cliente);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<String> createCliente(@RequestBody ClienteDTO clienteDTO) {
+        String responseMessage = service.create(clienteDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO cliente) {
-        clienteService.update(id, cliente);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO) {
+        String responseMessage = service.update(id, clienteDTO);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
-        clienteService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

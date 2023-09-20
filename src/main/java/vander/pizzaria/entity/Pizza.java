@@ -15,7 +15,7 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "valor", nullable = false)
+    @Column(name = "valor")
     double valor;
 
     @Column(name = "tamanho", length = 1, nullable = false)

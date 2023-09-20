@@ -67,18 +67,22 @@ public class PizzaService {
     public boolean quantidadeSabor(Pizza pizza) {
         String tamanho = pizza.getTamanho();
         List<Sabor> sabores = pizza.getSabores();
+        int quantidadeSabores = sabores.size();
 
-        if (tamanho.equalsIgnoreCase("P") && sabores.size() != 1) {
-            return false;
-        } else if (tamanho.equalsIgnoreCase("M") && sabores.size() >= 2) {
-            return false;
-        } else if (tamanho.equalsIgnoreCase("G") && sabores.size() >= 3) {
-            return false;
-        } else if (tamanho.equalsIgnoreCase("GG") && sabores.size() >= 4) {
-            return false;
+        switch (tamanho.toUpperCase()) {
+            case "P":
+                return quantidadeSabores == 1;
+            case "M":
+                return quantidadeSabores <= 2;
+            case "G":
+                return quantidadeSabores <= 3;
+            case "GG":
+                return quantidadeSabores <= 4;
+            default:
+                return false;
         }
-        return true;
     }
+
 
     private PizzaDTO convertToDTO(Pizza pizza) {
         PizzaDTO pizzaDTO = new PizzaDTO();

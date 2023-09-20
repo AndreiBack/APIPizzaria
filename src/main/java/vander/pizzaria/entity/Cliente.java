@@ -27,7 +27,7 @@ public class Cliente {
     String senha;
     @Column(name = "telefone", length = 15, nullable = false)
     String telefone;
-    @ManyToMany
-    @Column(name = "enderecos")
-    List<Endereco> enderecos ;
+    @ManyToOne
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
 }

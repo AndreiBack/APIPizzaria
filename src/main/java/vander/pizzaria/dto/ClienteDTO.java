@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vander.pizzaria.entity.Endereco;
 
 @Getter @Setter
 @AllArgsConstructor
@@ -16,7 +17,7 @@ import lombok.Setter;
         private String email;
         private String senha;
         private String telefone;
-
+        private Endereco endereco;
 
 }
 

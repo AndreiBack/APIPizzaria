@@ -112,6 +112,7 @@ import static org.mockito.Mockito.*;
         pizzaM.setTamanho("M");
         List<Sabor> saboresM = new ArrayList<>();
         saboresM.add(new Sabor());
+        saboresM.add(new Sabor());
         pizzaM.setSabores(saboresM);
         assertTrue(pizzaService.quantidadeSabor(pizzaM));
 

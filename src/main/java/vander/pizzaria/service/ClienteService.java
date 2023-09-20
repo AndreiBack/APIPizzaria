@@ -5,76 +5,71 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import vander.pizzaria.dto.ClienteDTO;
+import org.modelmapper.ModelMapper;
 import vander.pizzaria.entity.Cliente;
 import vander.pizzaria.repository.ClienteRepository;
+import vander.pizzaria.repository.EnderecoRepository;
 
 import java.util.List;
 
 @Service
 public class ClienteService {
-
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public Cliente findById(final Long id) {
-        return clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+    private Cliente toCliente(ClienteDTO clienteDTO) {
+        return modelMapper.map(clienteDTO, Cliente.class);
     }
 
-    public List<Cliente> findAll() {
-        return clienteRepository.findAll();
+    private ClienteDTO toClienteDTO(Cliente cliente) {
+        return modelMapper.map(cliente, ClienteDTO.class);
+    }
+
+    private void idNotNull(Long id) {
+        Assert.notNull(clienteRepository.findById(id).orElse(null), String.format("ID [%s] não encontrado", id));
+    }
+
+    private void validationClienteDTO(ClienteDTO clienteDTO) {
+        Assert.notNull(clienteDTO.getNome(), "Digite seu Nome!");
+        Assert.hasText(clienteDTO.getNome(), "Digite seu Nome!");
+        Assert.hasText(clienteDTO.getSenha(), "Digite sua Senha!");
+        Assert.notNull(clienteDTO.getSenha(), "Digite sua Senha!");
+        Assert.hasText(clienteDTO.getEmail(), "Digite seu E-mail!");
+        Assert.notNull(clienteDTO.getEmail(), "Digite seu E-mail!");
+        Assert.hasText(clienteDTO.getTelefone(), "Digite seu Telefone!");
+        Assert.notNull(clienteDTO.getTelefone(), "Digite seu Telefone!");
+    }
+
+    public ClienteDTO findById(Long id) {
+        Cliente cliente = clienteRepository.findById(id).orElse(null);
+        return toClienteDTO(cliente);
+    }
+
+    public List<ClienteDTO> findAll() {
+        return clienteRepository.findAll().stream().map(this::toClienteDTO).toList();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void create(final ClienteDTO clienteDTO) {
-        Cliente cliente = convertToEntity(clienteDTO);
-        validateCliente(cliente);
-        clienteRepository.save(cliente);
+    public String create(ClienteDTO clienteDTO) {
+        validationClienteDTO(clienteDTO);
+        toClienteDTO(clienteRepository.save(toCliente(clienteDTO)));
+        return "Sucesso ao cadastrar novo Registro";
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void update(final Long id, final ClienteDTO clienteDTO) {
-        Cliente clienteDatabase = findById(id);
-        Assert.isTrue(clienteDatabase.getId().equals(clienteDTO.getId()), "Clientes não conferem!");
-
-        Cliente cliente = convertToEntity(clienteDTO);
-        validateCliente(cliente);
-        clienteRepository.save(cliente);
+    public String update(Long id, ClienteDTO clienteDTO) {
+        idNotNull(id);
+        validationClienteDTO(clienteDTO);
+        toClienteDTO(clienteRepository.save(toCliente(clienteDTO)));
+        return "Sucesso ao atualizar Registro do ID:" + id + " Cliente";
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(final Long id) {
-        Cliente cliente = findById(id);
-        clienteRepository.delete(cliente);
-    }
-
-    private void validateCliente(final Cliente cliente) {
-        Assert.notNull(cliente.getNome(), "Nome não pode ser nulo!");
-        Assert.isTrue(!cliente.getNome().isBlank(), "Nome inválido!");
-
-        Assert.notNull(cliente.getIdade(), "Idade não pode ser nula!");
-        Assert.isTrue(cliente.getIdade() > 0, "Idade não pode ser negativa!");
-
-        Assert.isTrue(cliente.getCpf().matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"), "CPF inválido");
-
-        Assert.isTrue(cliente.getTelefone().matches("\\(\\d{2}\\)\\d{5}-\\d{4}"), "Telefone inválido");
-
-        Assert.notNull(cliente.getEmail(), "Email não pode ser nulo!");
-        Assert.isTrue(!cliente.getEmail().isBlank(), "Deve conter email!");
-        Assert.isTrue(cliente.getEmail().matches("[a-zA-Z0-9]+@[a-z]+[.][a-z]+"), "Formato do email inválido!");
-
-        Assert.notNull(cliente.getSenha(), "Senha não pode ser nula!");
-        Assert.isTrue(!cliente.getSenha().isBlank(), "Deve conter senha!");
-    }
-
-    private Cliente convertToEntity(ClienteDTO clienteDTO) {
-        Cliente cliente = new Cliente();
-        cliente.setId(clienteDTO.getId());
-        cliente.setNome(clienteDTO.getNome());
-        cliente.setIdade(clienteDTO.getIdade());
-        cliente.setCpf(clienteDTO.getCpf());
-        cliente.setEmail(clienteDTO.getEmail());
-        cliente.setSenha(clienteDTO.getSenha());
-        cliente.setTelefone(clienteDTO.getTelefone());
-        return cliente;
+    public void delete(Long id) {
+        idNotNull(id);
+        clienteRepository.deleteById(id);
     }
 }

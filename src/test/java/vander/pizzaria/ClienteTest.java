@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
         Cliente cliente = new Cliente();
         cliente.setId(id);
         when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
-        Cliente result = clienteService.findById(id);
+        ClienteDTO result = clienteService.findById(id);
         Assert.isTrue(result.getId().equals(id), "Cliente encontrado incorretamente");
        verify(clienteRepository, times(0)).save(any(Cliente.class));
 
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
         clientes.add(new Cliente());
         clientes.add(new Cliente());
         when(clienteRepository.findAll()).thenReturn(clientes);
-        List<Cliente> result = clienteService.findAll();
+        List<ClienteDTO> result = clienteService.findAll();
         Assert.isTrue(result.size() == clientes.size(), "Número incorreto de clientes encontrados");
        verify(clienteRepository, times(0)).save(any(Cliente.class));
 
