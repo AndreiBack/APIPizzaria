@@ -1,15 +1,18 @@
 package vander.pizzaria.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class SaborDTO {
     private Long id;
     private String nome;
     private List<String> ingredientes;
+
+
 }
 

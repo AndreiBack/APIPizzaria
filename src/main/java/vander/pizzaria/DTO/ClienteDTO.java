@@ -1,13 +1,13 @@
 package vander.pizzaria.DTO;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.junit.Test;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import static org.junit.Assert.assertEquals;
-
-@Data
+@Getter @Setter
 @AllArgsConstructor
+@NoArgsConstructor
     public class ClienteDTO {
         private Long id;
         private String nome;
@@ -17,9 +17,7 @@ import static org.junit.Assert.assertEquals;
         private String senha;
         private String telefone;
 
-    public ClienteDTO() {
 
-    }
 }
 
 

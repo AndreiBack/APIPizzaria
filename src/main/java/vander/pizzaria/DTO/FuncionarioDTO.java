@@ -1,9 +1,10 @@
 package vander.pizzaria.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class FuncionarioDTO {
     private Long id;
@@ -11,6 +12,7 @@ public class FuncionarioDTO {
     private int idade;
     private String cpf;
     private String email;
+    private String senha;
     private String telefone;
 
 }

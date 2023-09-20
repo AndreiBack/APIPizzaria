@@ -53,6 +53,7 @@ public class EnderecoService {
         Assert.isTrue(!endereco.getBairro().isBlank(), "Bairro inválido!");
         Assert.isTrue(!endereco.getRua().isBlank(), "Rua inválida!");
         Assert.notNull(endereco.getNumero(), "Número da residência não pode ser nulo!");
+        Assert.isTrue(endereco.getCep().matches("\\d{5}-\\d{3}"), "CEP invalido");
         Assert.isTrue(endereco.getNumero() > 0, "Número da residência não pode ser negativo!");
     }
 }

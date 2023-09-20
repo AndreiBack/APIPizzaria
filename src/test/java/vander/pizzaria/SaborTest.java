@@ -5,21 +5,30 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import vander.pizzaria.Controller.SaborController;
 import vander.pizzaria.DTO.SaborDTO;
 import vander.pizzaria.Entity.Sabor;
 import vander.pizzaria.Repository.SaborRepository;
 import vander.pizzaria.Service.SaborService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class SaborTest {
 
     @Mock
     private SaborRepository saborRepository;
+
+    @InjectMocks
+    private SaborController saborController;
 
     @InjectMocks
     private SaborService saborService;
@@ -89,4 +98,26 @@ public class SaborTest {
 
         assert result;
     }
+
+    @Test
+    public void testSaborDTO() {
+
+        SaborDTO saborDTO = new SaborDTO(1L, "Margarita", List.of("Molho de Tomate", "Queijo"));
+
+        assertEquals(1L, saborDTO.getId());
+        assertEquals("Margarita", saborDTO.getNome());
+        assertEquals(List.of("Molho de Tomate", "Queijo"), saborDTO.getIngredientes());
+
+
+        saborDTO.setId(2L);
+        saborDTO.setNome("Calabresa");
+        saborDTO.setIngredientes(List.of("Molho de Tomate", "Queijo", "Calabresa"));
+
+
+        assertEquals(2L, saborDTO.getId());
+        assertEquals("Calabresa", saborDTO.getNome());
+        assertEquals(List.of("Molho de Tomate", "Queijo", "Calabresa"), saborDTO.getIngredientes());
+    }
+
+
 }

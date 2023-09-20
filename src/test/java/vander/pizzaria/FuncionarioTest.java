@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import vander.pizzaria.DTO.FuncionarioDTO;
 import vander.pizzaria.Entity.Funcionario;
 import vander.pizzaria.Repository.FuncionarioRepository;
 import vander.pizzaria.Service.FuncionarioService;
@@ -34,49 +35,51 @@ public class FuncionarioTest {
         funcionarios.add(new Funcionario());
         funcionarios.add(new Funcionario());
         when(funcionarioRepository.findAll()).thenReturn(funcionarios);
-        List<Funcionario> result = funcionarioService.getAllFuncionarios();
+
+        List<FuncionarioDTO> result = funcionarioService.findAll();
         assert result.size() == funcionarios.size();
     }
 
     @Test
     public void testCreateFuncionario() {
-        Funcionario funcionario = new Funcionario();
-        funcionario.setNome("Nome do Funcionário");
-        funcionario.setIdade(30);
-        funcionario.setCpf("12345678901");
-        funcionario.setEmail("funcionario@example.com");
-        funcionario.setSenha("senha123");
-        funcionario.setTelefone("123-456-7890");
-        when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(funcionario);
-        Funcionario result = funcionarioService.createFuncionario(funcionario);
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
+        funcionarioDTO.setNome("Nome do Funcionário");
+        funcionarioDTO.setIdade(25);
+        funcionarioDTO.setCpf("123.456.789-09");
+        funcionarioDTO.setEmail("vander@gmail.com");
+        funcionarioDTO.setSenha("senhalegal");
+        funcionarioDTO.setTelefone("(45)99834-7219");
+
+        when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(new Funcionario());
+
+        Funcionario result = funcionarioService.create(funcionarioDTO);
         assert result != null;
     }
 
     @Test
     public void testUpdateFuncionario() {
         Long id = 1L;
-        Funcionario funcionario = new Funcionario();
-        funcionario.setId(id);
-        funcionario.setNome("Nome do Funcionário");
-        funcionario.setIdade(30);
-        funcionario.setCpf("12345678901");
-        funcionario.setEmail("funcionario@example.com");
-        funcionario.setSenha("senha123");
-        funcionario.setTelefone("123-456-7890");
-        when(funcionarioRepository.findById(id)).thenReturn(Optional.of(funcionario));
-        when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(funcionario);
-        Funcionario updatedFuncionario = funcionarioService.updateFuncionario(id, funcionario);
-        assert updatedFuncionario != null;
-        assert updatedFuncionario.getId().equals(id);
+        FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
+        funcionarioDTO.setId(id);
+        funcionarioDTO.setNome("Nome do Funcionário");
+        funcionarioDTO.setIdade(25);
+        funcionarioDTO.setCpf("123.456.789-09");
+        funcionarioDTO.setEmail("andrei@gmail.com");
+        funcionarioDTO.setSenha("senhalegal");
+        funcionarioDTO.setTelefone("(45)99834-7219");
+
+        when(funcionarioRepository.findById(id)).thenReturn(Optional.of(new Funcionario()));
+        when(funcionarioRepository.save(any(Funcionario.class))).thenReturn(new Funcionario());
+
+        Funcionario updatedFuncionario = funcionarioService.update(id, funcionarioDTO);
     }
+
 
     @Test
     public void testDeleteFuncionario() {
         Long id = 1L;
-        Funcionario funcionario = new Funcionario();
-        funcionario.setId(id);
-        when(funcionarioRepository.findById(id)).thenReturn(Optional.of(funcionario));
-        boolean result = funcionarioService.deleteFuncionario(id);
+        when(funcionarioRepository.findById(id)).thenReturn(Optional.of(new Funcionario()));
+        boolean result = funcionarioService.delete(id);
         assert result;
     }
 }

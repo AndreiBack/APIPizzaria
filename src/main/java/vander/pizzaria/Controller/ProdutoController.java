@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vander.pizzaria.DTO.ProdutoDTO;
 import vander.pizzaria.Entity.Produto;
 import vander.pizzaria.Service.ProdutoService;
 
@@ -21,20 +22,20 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> getAllProdutos() {
-        List<Produto> produtos = produtoService.getAllProdutos();
+    public ResponseEntity<List<ProdutoDTO>> getAllProdutos() {
+        List<ProdutoDTO> produtos = produtoService.getAll();
         return new ResponseEntity<>(produtos, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Produto> createProduto(@RequestBody Produto produto) {
-        Produto createdProduto = produtoService.createProduto(produto);
+    public ResponseEntity<ProdutoDTO> createProduto(@RequestBody ProdutoDTO produtoDTO) {
+        ProdutoDTO createdProduto = produtoService.create(produtoDTO);
         return new ResponseEntity<>(createdProduto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> updateProduto(@PathVariable Long id, @RequestBody Produto produto) {
-        Produto updatedProduto = produtoService.updateProduto(id, produto);
+    public ResponseEntity<ProdutoDTO> updateProduto(@PathVariable Long id, @RequestBody ProdutoDTO produtoDTO) {
+        ProdutoDTO updatedProduto = produtoService.update(id, produtoDTO);
         if (updatedProduto != null) {
             return new ResponseEntity<>(updatedProduto, HttpStatus.OK);
         } else {
@@ -44,7 +45,7 @@ public class ProdutoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduto(@PathVariable Long id) {
-        boolean deleted = produtoService.deleteProduto(id);
+        boolean deleted = produtoService.delete(id);
         if (deleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

@@ -1,12 +1,15 @@
 package vander.pizzaria;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import vander.pizzaria.DTO.ProdutoDTO;
 import vander.pizzaria.Entity.Produto;
 import vander.pizzaria.Repository.ProdutoRepository;
 import vander.pizzaria.Service.ProdutoService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,32 +35,50 @@ public class ProdutoTest {
         produtos.add(new Produto());
         produtos.add(new Produto());
         when(produtoRepository.findAll()).thenReturn(produtos);
-        List<Produto> result = produtoService.getAllProdutos();
+        List<ProdutoDTO> result = produtoService.getAll();
         assert result.size() == produtos.size();
     }
 
     @Test
     public void testCreateProduto() {
+        ProdutoDTO produtoDTO = new ProdutoDTO();
+        produtoDTO.setNome("Produto de Teste");
+        produtoDTO.setDescricao("Descrição do Produto de Teste");
+        produtoDTO.setValorTotal(10.0);
+
         Produto produto = new Produto();
-        produto.setNome("Produto de Teste");
-        produto.setDescricao("Descrição do Produto de Teste");
-        produto.setValorTotal(10.0);
+        produto.setId(1L);
+        produto.setNome(produtoDTO.getNome());
+        produto.setDescricao(produtoDTO.getDescricao());
+        produto.setValorTotal(produtoDTO.getValorTotal());
+
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
-        Produto result = produtoService.createProduto(produto);
+
+        ProdutoDTO result = produtoService.create(produtoDTO);
         assert result != null;
+        assert result.getId().equals(produto.getId());
     }
 
     @Test
     public void testUpdateProduto() {
         Long id = 1L;
+
+        ProdutoDTO produtoDTO = new ProdutoDTO();
+        produtoDTO.setId(id);
+        produtoDTO.setNome("Produto Atualizado");
+        produtoDTO.setDescricao("Descrição Atualizada");
+        produtoDTO.setValorTotal(15.0);
+
         Produto produto = new Produto();
         produto.setId(id);
-        produto.setNome("Produto Atualizado");
-        produto.setDescricao("Descrição Atualizada");
-        produto.setValorTotal(15.0);
+        produto.setNome(produtoDTO.getNome());
+        produto.setDescricao(produtoDTO.getDescricao());
+        produto.setValorTotal(produtoDTO.getValorTotal());
+
         when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
-        Produto updatedProduto = produtoService.updateProduto(id, produto);
+
+        ProdutoDTO updatedProduto = produtoService.update(id, produtoDTO);
         assert updatedProduto != null;
         assert updatedProduto.getId().equals(id);
     }
@@ -68,7 +89,7 @@ public class ProdutoTest {
         Produto produto = new Produto();
         produto.setId(id);
         when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-        boolean result = produtoService.deleteProduto(id);
+        boolean result = produtoService.delete(id);
         assert result;
     }
 }

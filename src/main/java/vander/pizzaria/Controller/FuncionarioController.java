@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vander.pizzaria.DTO.FuncionarioDTO;
 import vander.pizzaria.Entity.Funcionario;
 import vander.pizzaria.Service.FuncionarioService;
 
@@ -20,35 +21,33 @@ public class FuncionarioController {
         this.funcionarioService = funcionarioService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Funcionario> getFuncionario(@PathVariable Long id) {
+        Funcionario funcionario = funcionarioService.findById(id);
+        return new ResponseEntity<>(funcionario, HttpStatus.OK);
+    }
+
     @GetMapping
-    public ResponseEntity<List<Funcionario>> getAllFuncionarios() {
-        List<Funcionario> funcionarios = funcionarioService.getAllFuncionarios();
+    public ResponseEntity<List<FuncionarioDTO>> getAllFuncionarios() {
+        List<FuncionarioDTO> funcionarios = funcionarioService.findAll();
         return new ResponseEntity<>(funcionarios, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Funcionario> createFuncionario(@RequestBody Funcionario funcionario) {
-        Funcionario createdFuncionario = funcionarioService.createFuncionario(funcionario);
-        return new ResponseEntity<>(createdFuncionario, HttpStatus.CREATED);
+    public ResponseEntity<Void> createFuncionario(@RequestBody FuncionarioDTO funcionarioDTO) {
+        funcionarioService.create(funcionarioDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> updateFuncionario(@PathVariable Long id, @RequestBody Funcionario funcionario) {
-        Funcionario updatedFuncionario = funcionarioService.updateFuncionario(id, funcionario);
-        if (updatedFuncionario != null) {
-            return new ResponseEntity<>(updatedFuncionario, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Void> updateFuncionario(@PathVariable Long id, @RequestBody FuncionarioDTO funcionarioDTO) {
+        funcionarioService.update(id, funcionarioDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFuncionario(@PathVariable Long id) {
-        boolean deleted = funcionarioService.deleteFuncionario(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        funcionarioService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
