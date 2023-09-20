@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vander.pizzaria.dto.ClienteDTO;
-import vander.pizzaria.entity.Cliente;
 import vander.pizzaria.service.ClienteService;
 
 import java.util.List;

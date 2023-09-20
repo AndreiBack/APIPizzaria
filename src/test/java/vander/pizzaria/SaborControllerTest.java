@@ -1,82 +1,120 @@
 package vander.pizzaria;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import vander.pizzaria.controller.SaborController;
 import vander.pizzaria.dto.SaborDTO;
-import vander.pizzaria.entity.Sabor;
-import vander.pizzaria.repository.SaborRepository;
 import vander.pizzaria.service.SaborService;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
- class SaborControllerTest {
+class SaborControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+   @InjectMocks
+   private SaborController controller;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-    @InjectMocks
-    private SaborService saborService;
+   @Mock
+   private SaborService service;
 
-    @Mock
-    private SaborRepository saborRepository;
-    @BeforeEach
-    public void setup() {
-    }
+   @BeforeEach
+   public void setUp() {
+      MockitoAnnotations.initMocks(this);
+   }
 
-    @Test
-     void testCreateSabor() throws Exception {
-        SaborDTO saborDTO = new SaborDTO();
-        saborDTO.setNome("Sabor de Teste");
-        saborDTO.setIngredientes(List.of("Ingrediente 1", "Ingrediente 2"));
+   @Test
+   void testGetAllSabores() {
+      List<SaborDTO> sabores = new ArrayList<>();
+      sabores.add(new SaborDTO());
+      sabores.add(new SaborDTO());
 
-        String saborJson = objectMapper.writeValueAsString(saborDTO);
+      when(service.getAll()).thenReturn(sabores);
 
-        ResultActions result = mockMvc.perform(post("/sabores")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(saborJson));
+      ResponseEntity<List<SaborDTO>> response = controller.getAllSabores();
 
-        result.andExpect(status().isCreated());
-    }
-    @Test
-     void testGetAllSabores() throws Exception {
-        ResultActions result = mockMvc.perform(get("/sabores"));
-        result.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
+      assertEquals(HttpStatus.OK, response.getStatusCode());
+      assertEquals(sabores, response.getBody());
 
-    @Test
-     void testDeleteSaborService() {
-        Long id = 1L;
+      verify(service, times(1)).getAll();
+   }
 
-        when(saborRepository.existsById(id)).thenReturn(true);
-        when(saborRepository.findById(id)).thenReturn(Optional.of(new Sabor()));
+   @Test
+   void testCreateSabor() {
+      SaborDTO saborDTO = new SaborDTO();
+      SaborDTO createdSabor = new SaborDTO();
 
-        boolean result = saborService.delete(id);
+      when(service.create(saborDTO)).thenReturn(createdSabor);
 
-        assert result;
-       verify(saborRepository, times(0)).save(any(Sabor.class));
+      ResponseEntity<SaborDTO> response = controller.createSabor(saborDTO);
 
+      assertEquals(HttpStatus.CREATED, response.getStatusCode());
+      assertEquals(createdSabor, response.getBody());
 
-    }
+      verify(service, times(1)).create(saborDTO);
+   }
+
+   @Test
+   void testUpdateSabor() {
+      Long saborId = 1L;
+      SaborDTO saborDTO = new SaborDTO();
+      SaborDTO updatedSabor = new SaborDTO();
+
+      when(service.update(saborId, saborDTO)).thenReturn(updatedSabor);
+
+      ResponseEntity<SaborDTO> response = controller.updateSabor(saborId, saborDTO);
+
+      assertEquals(HttpStatus.OK, response.getStatusCode());
+      assertEquals(updatedSabor, response.getBody());
+
+      verify(service, times(1)).update(saborId, saborDTO);
+   }
+
+   @Test
+   void testUpdateSaborNotFound() {
+      Long saborId = 1L;
+      SaborDTO saborDTO = new SaborDTO();
+
+      when(service.update(saborId, saborDTO)).thenReturn(null);
+
+      ResponseEntity<SaborDTO> response = controller.updateSabor(saborId, saborDTO);
+
+      assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+      assertEquals(null, response.getBody());
+
+      verify(service, times(1)).update(saborId, saborDTO);
+   }
+
+   @Test
+   void testDeleteSabor() {
+      Long saborId = 1L;
+
+      when(service.delete(saborId)).thenReturn(true);
+
+      ResponseEntity<Void> response = controller.deleteSabor(saborId);
+
+      assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+      verify(service, times(1)).delete(saborId);
+   }
+
+   @Test
+   void testDeleteSaborNotFound() {
+      Long saborId = 1L;
+
+      when(service.delete(saborId)).thenReturn(false);
+
+      ResponseEntity<Void> response = controller.deleteSabor(saborId);
+
+      assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+      verify(service, times(1)).delete(saborId);
+   }
 }
-
-

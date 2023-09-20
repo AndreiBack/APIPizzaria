@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vander.pizzaria.dto.EnderecoDTO;
-import vander.pizzaria.entity.Endereco;
 import vander.pizzaria.service.EnderecoService;
 
 import java.util.List;
