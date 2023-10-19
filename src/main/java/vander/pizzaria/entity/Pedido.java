@@ -20,7 +20,7 @@ public class Pedido {
     @Column(name = "quantidade", nullable = false)
     int quantidade;
     @Column(name = "valor", nullable = false)
-    double valor;
+    double valorTotal;
     @Column(name = "data", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")

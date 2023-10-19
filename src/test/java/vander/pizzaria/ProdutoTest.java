@@ -50,7 +50,7 @@ import static org.mockito.Mockito.*;
         produto.setId(1L);
         produto.setNome(produtoDTO.getNome());
         produto.setDescricao(produtoDTO.getDescricao());
-        produto.setValorTotal(produtoDTO.getValorTotal());
+        produto.setValor(produtoDTO.getValorTotal());
 
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
 
@@ -75,7 +75,7 @@ import static org.mockito.Mockito.*;
         produto.setId(id);
         produto.setNome(produtoDTO.getNome());
         produto.setDescricao(produtoDTO.getDescricao());
-        produto.setValorTotal(produtoDTO.getValorTotal());
+        produto.setValor(produtoDTO.getValorTotal());
 
         when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);

@@ -44,7 +44,7 @@ public class ProdutoService {
             Produto produtoToUpdate = existingProduto.get();
             produtoToUpdate.setNome(produtoDTO.getNome());
             produtoToUpdate.setDescricao(produtoDTO.getDescricao());
-            produtoToUpdate.setValorTotal(produtoDTO.getValorTotal());
+            produtoToUpdate.setValor(produtoDTO.getValor());
 
             Produto updatedProduto = produtoRepository.save(produtoToUpdate);
             return mapToProdutoDTO(updatedProduto);
@@ -68,7 +68,7 @@ public class ProdutoService {
         Assert.notNull(produtoDTO.getDescricao(), "Descrição não pode ser nula!");
         Assert.isTrue(!produtoDTO.getDescricao().isBlank(), "Descrição inválida!");
 
-        Assert.isTrue(produtoDTO.getValorTotal() >= 0, "Valor total não pode ser negativo!");
+        Assert.isTrue(produtoDTO.getValor() >= 0, "Valor total não pode ser negativo!");
     }
 
     private ProdutoDTO mapToProdutoDTO(Produto produto) {
@@ -76,7 +76,7 @@ public class ProdutoService {
                 produto.getId(),
                 produto.getNome(),
                 produto.getDescricao(),
-                produto.getValorTotal()
+                produto.getValor()
         );
     }
 
@@ -85,7 +85,7 @@ public class ProdutoService {
         produto.setId(produtoDTO.getId());
         produto.setNome(produtoDTO.getNome());
         produto.setDescricao(produtoDTO.getDescricao());
-        produto.setValorTotal(produtoDTO.getValorTotal());
+        produto.setValor(produtoDTO.getValor());
         return produto;
     }
 }

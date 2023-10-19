@@ -108,11 +108,11 @@ import static org.mockito.Mockito.*;
         pizzas.add(pizza2);
 
         Produto produto1 = new Produto();
-        produto1.setValorTotal(5.0);
+        produto1.setValor(5.0);
         produtos.add(produto1);
 
         Produto produto2 = new Produto();
-        produto2.setValorTotal(8.0);
+        produto2.setValor(8.0);
         produtos.add(produto2);
 
         pedido.setPizzas(pizzas);

@@ -38,7 +38,7 @@ public class PedidoService {
             pedidoToUpdate.setProdutos(pedido.getProdutos());
 
             double valorTotalPedido = calcularValorPedido(pedidoToUpdate);
-            pedidoToUpdate.setValor(valorTotalPedido);
+            pedidoToUpdate.setValorTotal(valorTotalPedido);
 
             return pedidoRepository.save(pedidoToUpdate);
         }
@@ -56,15 +56,19 @@ public class PedidoService {
     public double calcularValorPedido(Pedido pedido) {
         double totalValue = 0.0;
 
+        System.out.println("Pedido: " + pedido); // Debug statement
+
         for (Pizza pizza : pedido.getPizzas()) {
+            System.out.println("Pizza valor: " + pizza.getValor()); // Debug statement
             totalValue += pizza.getValor();
         }
 
         for (Produto produto : pedido.getProdutos()) {
-            totalValue += produto.getValorTotal();
+            System.out.println("Produto valor: " + produto.getValor()); // Debug statement
+            totalValue += produto.getValor();
         }
-
-        pedido.setValor(totalValue);
+        totalValue *= pedido.getQuantidade();
+        pedido.setValorTotal(totalValue);
         return totalValue;
     }
 }

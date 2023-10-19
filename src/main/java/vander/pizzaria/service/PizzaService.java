@@ -43,6 +43,7 @@ public class PizzaService {
         if (existingPizza.isPresent()) {
             Pizza pizzaToUpdate = existingPizza.get();
             pizzaToUpdate.setTamanho(pizzaDTO.getTamanho());
+            pizzaToUpdate.setValor(pizzaDTO.getValor());
             pizzaToUpdate.setSabores(convertDTOsToSabores(pizzaDTO.getSabores()));
 
             if (!quantidadeSabor(pizzaToUpdate)) {
@@ -88,6 +89,7 @@ public class PizzaService {
         PizzaDTO pizzaDTO = new PizzaDTO();
         pizzaDTO.setId(pizza.getId());
         pizzaDTO.setTamanho(pizza.getTamanho());
+        pizzaDTO.setValor(pizza.getValor());
         pizzaDTO.setSabores(convertSaboresToDTOs(pizza.getSabores()));
         return pizzaDTO;
     }
@@ -98,6 +100,7 @@ public class PizzaService {
         Pizza pizza = new Pizza();
         pizza.setId(pizzaDTO.getId());
         pizza.setTamanho(pizzaDTO.getTamanho());
+        pizza.setValor(pizzaDTO.getValor());
         pizza.setSabores(convertDTOsToSabores(pizzaDTO.getSabores()));
         return pizza;
     }
