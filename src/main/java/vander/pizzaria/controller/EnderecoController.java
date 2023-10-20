@@ -10,6 +10,7 @@ import vander.pizzaria.service.EnderecoService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/enderecos")
 public class EnderecoController {
     @Autowired

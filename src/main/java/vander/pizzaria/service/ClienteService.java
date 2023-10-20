@@ -62,11 +62,22 @@ public class ClienteService {
 
     @Transactional(rollbackFor = Exception.class)
     public String update(Long id, ClienteDTO clienteDTO) {
-        idNotNull(id);
+        Cliente existingCliente = clienteRepository.findById(id).orElse(null);
+        if (existingCliente == null) {
+            throw new IllegalArgumentException("ID [" + id + "] não encontrado");
+        }
+
         validationClienteDTO(clienteDTO);
-        toClienteDTO(clienteRepository.save(toCliente(clienteDTO)));
+        existingCliente.setNome(clienteDTO.getNome());
+        existingCliente.setSenha(clienteDTO.getSenha());
+        existingCliente.setEmail(clienteDTO.getEmail());
+        existingCliente.setTelefone(clienteDTO.getTelefone());
+
+        clienteRepository.save(existingCliente);
+
         return "Sucesso ao atualizar Registro do ID:" + id + " Cliente";
     }
+
 
     public void delete(Long id) {
         idNotNull(id);

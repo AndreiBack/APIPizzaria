@@ -10,6 +10,7 @@ import vander.pizzaria.service.ClienteService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/clientes")
 public class ClienteController {
     @Autowired

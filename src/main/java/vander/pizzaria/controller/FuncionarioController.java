@@ -11,6 +11,7 @@ import vander.pizzaria.service.FuncionarioService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/funcionarios")
 public class FuncionarioController {
 

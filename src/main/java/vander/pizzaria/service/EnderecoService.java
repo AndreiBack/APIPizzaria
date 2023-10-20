@@ -50,11 +50,21 @@ public class EnderecoService {
         return "Sucesso ao cadastrar novo Registro";
     }
     @Transactional(rollbackFor = Exception.class)
-    public String update(Long id, EnderecoDTO enderecoDTO){
-        idNotNull(id);
+    public String update(Long id, EnderecoDTO enderecoDTO) {
+        Endereco existingEndereco = enderecoRepository.findById(id).orElse(null);
+        if (existingEndereco == null) {
+            throw new IllegalArgumentException("ID [" + id + "] não encontrado");
+        }
+
         validationEnderecoDTO(enderecoDTO);
-        toEnderecoDTO(enderecoRepository.save(toEndereco(enderecoDTO)));
-        return "Sucesso ao atualizar Registro do ID:" + id + " Cliente";
+        existingEndereco.setBairro(enderecoDTO.getBairro());
+        existingEndereco.setNumero(enderecoDTO.getNumero());
+        existingEndereco.setCep(enderecoDTO.getCep());
+        existingEndereco.setRua(enderecoDTO.getRua());
+
+        enderecoRepository.save(existingEndereco);
+
+        return "Sucesso ao atualizar Registro do ID:" + id + " Endereço";
     }
     public void delete(Long id){
         idNotNull(id);

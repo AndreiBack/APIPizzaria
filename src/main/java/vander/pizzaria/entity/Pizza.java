@@ -18,7 +18,7 @@ public class Pizza {
     @Column(name = "valor")
     double valor;
 
-    @Column(name = "tamanho", length = 1, nullable = false)
+    @Column(name = "tamanho", length = 2, nullable = false)
     String tamanho;
 
     @ManyToMany

@@ -10,6 +10,7 @@ import vander.pizzaria.service.PizzaService;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/pizzas")
 public class PizzaController {
 

@@ -33,8 +33,15 @@ public class FuncionarioService {
 
         Optional<Funcionario> existingFuncionario = funcionarioRepository.findById(id);
         if (existingFuncionario.isPresent()) {
-            Funcionario funcionarioToUpdate = convertToEntity(funcionarioDTO);
-            funcionarioToUpdate.setId(id);
+            Funcionario funcionarioToUpdate = existingFuncionario.get();
+
+            funcionarioToUpdate.setNome(funcionarioDTO.getNome());
+            funcionarioToUpdate.setIdade(funcionarioDTO.getIdade());
+            funcionarioToUpdate.setCpf(funcionarioDTO.getCpf());
+            funcionarioToUpdate.setEmail(funcionarioDTO.getEmail());
+            funcionarioToUpdate.setSenha(funcionarioDTO.getSenha());
+            funcionarioToUpdate.setTelefone(funcionarioDTO.getTelefone());
+
             return funcionarioRepository.save(funcionarioToUpdate);
         }
         return null;
