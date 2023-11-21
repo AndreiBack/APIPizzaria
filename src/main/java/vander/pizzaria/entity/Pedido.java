@@ -16,11 +16,13 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "status")
-    boolean status;
+    Status status;
     @Column(name = "quantidade", nullable = false)
     int quantidade;
     @Column(name = "valor", nullable = false)
     double valorTotal;
+    @Column(name = "observacao")
+    String observacao;
     @Column(name = "data", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")

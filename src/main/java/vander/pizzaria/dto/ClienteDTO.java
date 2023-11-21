@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vander.pizzaria.entity.Endereco;
 
+import java.util.List;
+
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +19,7 @@ import vander.pizzaria.entity.Endereco;
         private String email;
         private String senha;
         private String telefone;
-        private Endereco endereco;
+        private List<Endereco> endereco;
 
 }
 

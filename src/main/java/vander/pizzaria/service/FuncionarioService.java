@@ -60,13 +60,8 @@ public class FuncionarioService {
         Assert.notNull(funcionarioDTO, "Funcionário não pode ser nulo");
         Assert.isTrue(!funcionarioDTO.getNome().isBlank(), "Nome inválido!");
         Assert.isTrue(funcionarioDTO.getIdade() > 0, "Idade inválida!");
-        Assert.isTrue(funcionarioDTO.getCpf().matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"), "CPF inválido");
-        Assert.isTrue(funcionarioDTO.getTelefone().matches("\\(\\d{2}\\)\\d{5}-\\d{4}"), "Telefone inválido");
-        Assert.notNull(funcionarioDTO.getEmail(), "Email não pode ser nulo!");
-        Assert.isTrue(!funcionarioDTO.getEmail().isBlank(), "Deve conter email!");
-        Assert.notNull(funcionarioDTO.getSenha(), "Senha não pode ser nula!");
-        Assert.isTrue(!funcionarioDTO.getSenha().isBlank(), "Deve conter senha!");
-    }
+        Assert.isTrue(!funcionarioDTO.getCpf().isBlank(), "cpf inválido!");
+        Assert.isTrue(!funcionarioDTO.getTelefone().isBlank(), "telefone inválido!");    }
 
     private Funcionario convertToEntity(FuncionarioDTO funcionarioDTO) {
         Funcionario funcionario = new Funcionario();

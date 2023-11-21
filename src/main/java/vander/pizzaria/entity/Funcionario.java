@@ -12,15 +12,15 @@ public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "nome", length = 10, nullable = false)
+    @Column(name = "nome", length = 100, nullable = false)
     String nome;
     @Column(name = "idade", nullable = false)
     int idade;
     @Column(name = "cpf", length = 14, nullable = false)
     String cpf;
-    @Column(name = "email", length = 150, nullable = false)
+    @Column(name = "email", length = 150)
     String email;
-    @Column(name = "senha", length = 40, nullable = false)
+    @Column(name = "senha", length = 40)
     String senha;
     @Column(name = "telefone", length = 15, nullable = false)
     String telefone;

@@ -44,13 +44,13 @@ import static org.mockito.Mockito.*;
         ProdutoDTO produtoDTO = new ProdutoDTO();
         produtoDTO.setNome("Produto de Teste");
         produtoDTO.setDescricao("Descrição do Produto de Teste");
-        produtoDTO.setValorTotal(10.0);
+        produtoDTO.setValor(10.0);
 
         Produto produto = new Produto();
         produto.setId(1L);
         produto.setNome(produtoDTO.getNome());
         produto.setDescricao(produtoDTO.getDescricao());
-        produto.setValor(produtoDTO.getValorTotal());
+        produto.setValor(produtoDTO.getValor());
 
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
 
@@ -69,13 +69,13 @@ import static org.mockito.Mockito.*;
         produtoDTO.setId(id);
         produtoDTO.setNome("Produto Atualizado");
         produtoDTO.setDescricao("Descrição Atualizada");
-        produtoDTO.setValorTotal(15.0);
+        produtoDTO.setValor(15.0);
 
         Produto produto = new Produto();
         produto.setId(id);
         produto.setNome(produtoDTO.getNome());
         produto.setDescricao(produtoDTO.getDescricao());
-        produto.setValor(produtoDTO.getValorTotal());
+        produto.setValor(produtoDTO.getValor());
 
         when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
         when(produtoRepository.save(any(Produto.class))).thenReturn(produto);

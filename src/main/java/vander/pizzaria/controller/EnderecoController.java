@@ -44,4 +44,9 @@ public class EnderecoController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("erro")
+    private ResponseEntity<List<EnderecoDTO>> exemploErro(){
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
 }

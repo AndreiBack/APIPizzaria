@@ -45,4 +45,9 @@ public class ClienteController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("erro")
+    private ResponseEntity<List<ClienteDTO>> exemploErro(){
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
 }

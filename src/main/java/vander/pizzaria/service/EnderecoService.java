@@ -55,7 +55,6 @@ public class EnderecoService {
         if (existingEndereco == null) {
             throw new IllegalArgumentException("ID [" + id + "] não encontrado");
         }
-
         validationEnderecoDTO(enderecoDTO);
         existingEndereco.setBairro(enderecoDTO.getBairro());
         existingEndereco.setNumero(enderecoDTO.getNumero());
@@ -64,7 +63,7 @@ public class EnderecoService {
 
         enderecoRepository.save(existingEndereco);
 
-        return "Sucesso ao atualizar Registro do ID:" + id + " Endereço";
+        return null;
     }
     public void delete(Long id){
         idNotNull(id);

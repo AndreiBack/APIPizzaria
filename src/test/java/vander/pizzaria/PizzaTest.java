@@ -165,9 +165,7 @@ import static org.mockito.Mockito.*;
         SaborDTO saborDTO = new SaborDTO();
         saborDTO.setId(1L);
         saborDTO.setNome("Sabor Teste");
-        List<String> ingredientes = Arrays.asList("Ingrediente 1", "Ingrediente 2");
-        saborDTO.setIngredientes(ingredientes);
-
+       saborDTO.setIngredientes("calabresa,queijo,molho de tomate");
         Sabor sabor = convertToSabor(saborDTO);
 
         assertEquals(sabor.getId(), saborDTO.getId());
@@ -180,8 +178,7 @@ import static org.mockito.Mockito.*;
         Sabor sabor = new Sabor();
         sabor.setId(1L);
         sabor.setNome("Sabor Teste");
-        List<String> ingredientes = Arrays.asList("Ingrediente 1", "Ingrediente 2");
-        sabor.setIngredientes(ingredientes);
+        sabor.setIngredientes("calabresa,queijo,molho de tomate");
 
         SaborDTO saborDTO = convertToSaborDTO(sabor);
 

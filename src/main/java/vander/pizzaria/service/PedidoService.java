@@ -34,9 +34,10 @@ public class PedidoService {
             Pedido pedidoToUpdate = existingPedido.get();
             pedidoToUpdate.setQuantidade(pedido.getQuantidade());
             pedidoToUpdate.setFuncionario(pedido.getFuncionario());
+            pedidoToUpdate.setStatus(pedido.getStatus());
             pedidoToUpdate.setPizzas(pedido.getPizzas());
             pedidoToUpdate.setProdutos(pedido.getProdutos());
-
+            pedidoToUpdate.setObservacao(pedido.getObservacao());
             double valorTotalPedido = calcularValorPedido(pedidoToUpdate);
             pedidoToUpdate.setValorTotal(valorTotalPedido);
 

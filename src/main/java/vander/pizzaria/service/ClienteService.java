@@ -36,10 +36,6 @@ public class ClienteService {
     private void validationClienteDTO(ClienteDTO clienteDTO) {
         Assert.notNull(clienteDTO.getNome(), "Digite seu Nome!");
         Assert.hasText(clienteDTO.getNome(), "Digite seu Nome!");
-        Assert.hasText(clienteDTO.getSenha(), "Digite sua Senha!");
-        Assert.notNull(clienteDTO.getSenha(), "Digite sua Senha!");
-        Assert.hasText(clienteDTO.getEmail(), "Digite seu E-mail!");
-        Assert.notNull(clienteDTO.getEmail(), "Digite seu E-mail!");
         Assert.hasText(clienteDTO.getTelefone(), "Digite seu Telefone!");
         Assert.notNull(clienteDTO.getTelefone(), "Digite seu Telefone!");
     }
@@ -75,7 +71,7 @@ public class ClienteService {
 
         clienteRepository.save(existingCliente);
 
-        return "Sucesso ao atualizar Registro do ID:" + id + " Cliente";
+        return null;
     }
 
 

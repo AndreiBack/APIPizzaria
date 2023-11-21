@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -19,13 +21,13 @@ public class Cliente {
     int idade;
     @Column(name = "cpf", length = 14, nullable = false)
     String cpf;
-    @Column(name = "email", length = 150, nullable = false)
+    @Column(name = "email", length = 150)
     String email;
-    @Column(name = "senha", length = 40, nullable = false)
+    @Column(name = "senha", length = 40)
     String senha;
-    @Column(name = "telefone", length = 15, nullable = false)
+    @Column(name = "telefone", length = 15)
     String telefone;
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
+    private List<Endereco> endereco;
 }

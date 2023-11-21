@@ -45,7 +45,7 @@ import static org.mockito.Mockito.*;
 
     @Test
      void testCreateSabor() {
-        SaborDTO saborDTO = new SaborDTO(null, "Sabor de Teste", List.of("Ingrediente 1", "Ingrediente 2"));
+        SaborDTO saborDTO = new SaborDTO(null, "Sabor de Teste", "cebola,picanha,queijo");
         Sabor sabor = new Sabor();
         sabor.setId(1L);
         sabor.setNome(saborDTO.getNome());
@@ -64,7 +64,7 @@ import static org.mockito.Mockito.*;
     @Test
      void testUpdateSabor() {
         Long id = 1L;
-        SaborDTO saborDTO = new SaborDTO(id, "Sabor Atualizado", List.of("Ingrediente 1", "Ingrediente 2"));
+        SaborDTO saborDTO = new SaborDTO(id, "Sabor Atualizado", "cebola,picanha,queijo");
         Sabor sabor = new Sabor();
         sabor.setId(id);
         sabor.setNome(saborDTO.getNome());
@@ -100,21 +100,21 @@ import static org.mockito.Mockito.*;
     @Test
      void testSaborDTO() {
 
-        SaborDTO saborDTO = new SaborDTO(1L, "Margarita", List.of("Molho de Tomate", "Queijo"));
+        SaborDTO saborDTO = new SaborDTO(1L, "Margarita", "cebola,picanha,queijo");
 
         assertEquals(1L, saborDTO.getId());
         assertEquals("Margarita", saborDTO.getNome());
-        assertEquals(List.of("Molho de Tomate", "Queijo"), saborDTO.getIngredientes());
+        assertEquals("cebola,picanha,queijo", saborDTO.getIngredientes());
 
 
         saborDTO.setId(2L);
         saborDTO.setNome("Calabresa");
-        saborDTO.setIngredientes(List.of("Molho de Tomate", "Queijo", "Calabresa"));
+        saborDTO.setIngredientes("cebola,picanha,queijo");
 
 
         assertEquals(2L, saborDTO.getId());
         assertEquals("Calabresa", saborDTO.getNome());
-        assertEquals(List.of("Molho de Tomate", "Queijo", "Calabresa"), saborDTO.getIngredientes());
+        assertEquals("cebola,picanha,queijo", saborDTO.getIngredientes());
     }
 
 
