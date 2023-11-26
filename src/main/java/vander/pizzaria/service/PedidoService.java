@@ -7,6 +7,7 @@ import vander.pizzaria.entity.Pizza;
 import vander.pizzaria.entity.Produto;
 import vander.pizzaria.repository.PedidoRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class PedidoService {
     }
 
     public Pedido createPedido(Pedido pedido) {
+        if (pedido.getProdutos() == null) {
+            pedido.setProdutos(new ArrayList<>());
+        }
         calcularValorPedido(pedido);
         return pedidoRepository.save(pedido);
     }
@@ -32,7 +36,6 @@ public class PedidoService {
         Optional<Pedido> existingPedido = pedidoRepository.findById(id);
         if (existingPedido.isPresent()) {
             Pedido pedidoToUpdate = existingPedido.get();
-            pedidoToUpdate.setQuantidade(pedido.getQuantidade());
             pedidoToUpdate.setFuncionario(pedido.getFuncionario());
             pedidoToUpdate.setStatus(pedido.getStatus());
             pedidoToUpdate.setPizzas(pedido.getPizzas());
@@ -43,8 +46,12 @@ public class PedidoService {
 
             return pedidoRepository.save(pedidoToUpdate);
         }
+        if (pedido.getProdutos() == null) {
+            pedido.setProdutos(new ArrayList<>());
+        }
         return null;
     }
+
     public boolean deletePedido(Long id) {
         Optional<Pedido> existingPedido = pedidoRepository.findById(id);
         if (existingPedido.isPresent()) {
@@ -59,16 +66,22 @@ public class PedidoService {
 
         System.out.println("Pedido: " + pedido); // Debug statement
 
-        for (Pizza pizza : pedido.getPizzas()) {
-            System.out.println("Pizza valor: " + pizza.getValor()); // Debug statement
-            totalValue += pizza.getValor();
+        List<Pizza> pizzas = pedido.getPizzas();
+        if (pizzas != null) {
+            for (Pizza pizza : pizzas) {
+                System.out.println("Pizza valor: " + pizza.getValor()); // Debug statement
+                totalValue += pizza.getValor();
+            }
         }
 
-        for (Produto produto : pedido.getProdutos()) {
-            System.out.println("Produto valor: " + produto.getValor()); // Debug statement
-            totalValue += produto.getValor();
+        List<Produto> produtos = pedido.getProdutos();
+        if (produtos != null) {
+            for (Produto produto : produtos) {
+                System.out.println("Produto valor: " + produto.getValor()); // Debug statement
+                totalValue += produto.getValor();
+            }
         }
-        totalValue *= pedido.getQuantidade();
+
         pedido.setValorTotal(totalValue);
         return totalValue;
     }

@@ -17,8 +17,6 @@ public class Pedido {
     Long id;
     @Column(name = "status")
     Status status;
-    @Column(name = "quantidade", nullable = false)
-    int quantidade;
     @Column(name = "valor", nullable = false)
     double valorTotal;
     @Column(name = "observacao")

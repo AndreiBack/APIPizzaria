@@ -16,6 +16,6 @@ public class Produto {
     String nome;
     @Column(name = "descricao", length = 250, nullable = false)
     String descricao;
-    @Column(name = "valor", nullable = false)
+    @Column(name = "valor")
     double valor;
 }
