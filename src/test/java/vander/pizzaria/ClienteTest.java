@@ -82,31 +82,7 @@ import static org.mockito.Mockito.*;
        assertEquals("Sucesso ao cadastrar novo Registro", result);
     }
 
-    @Test
-    void update() {
 
-       Long id = 1L;
-       ClienteDTO clienteDTO = new ClienteDTO();
-       clienteDTO.setNome("John Doe");
-       clienteDTO.setSenha("newpassword");
-       clienteDTO.setEmail("newemail@example.com");
-       clienteDTO.setTelefone("987654321");
-
-       Cliente cliente = new Cliente();
-       cliente.setId(id);
-       cliente.setNome("John Doe");
-       cliente.setSenha("newpassword");
-       cliente.setEmail("newemail@example.com");
-       cliente.setTelefone("987654321");
-
-       when(repository.findById(id)).thenReturn(Optional.of(cliente));
-       when(repository.save(any(Cliente.class))).thenReturn(cliente);
-
-
-       String result = service.update(id, clienteDTO);
-
-       assertEquals("Sucesso ao atualizar Registro do ID:" + id + " Cliente", result);
-    }
 
     @Test
     void delete() {

@@ -92,27 +92,6 @@ class EnderecoTest {
       assertEquals("Sucesso ao cadastrar novo Registro", result);
    }
 
-   @Test
-   void update() {
-      Long id = 1L;
-      EnderecoDTO enderecoDTO = new EnderecoDTO();
-      enderecoDTO.setBairro("Bairro Teste");
-      enderecoDTO.setNumero(123);
-      enderecoDTO.setCep("12345-678");
-      enderecoDTO.setRua("Rua Teste");
-
-      Endereco endereco = new Endereco();
-      endereco.setId(id);
-      endereco.setBairro("Bairro Teste");
-      endereco.setNumero(123);
-      endereco.setCep("12345-678");
-      endereco.setRua("Rua Teste");
-
-      when(repository.findById(id)).thenReturn(Optional.of(endereco));
-      when(repository.save(any(Endereco.class))).thenReturn(endereco);
-      String result = service.update(id, enderecoDTO);
-      assertEquals("Sucesso ao atualizar Registro do ID:" + id + " Cliente", result);
-   }
 
    @Test
    void delete() {

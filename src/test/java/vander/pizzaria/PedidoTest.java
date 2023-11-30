@@ -45,7 +45,6 @@ import static org.mockito.Mockito.*;
     @Test
      void testCreatePedido() {
         Pedido pedido = new Pedido();
-        pedido.setQuantidade(2);
         pedido.setPizzas(new ArrayList<>());
         pedido.setProdutos(new ArrayList<>());
 
@@ -63,7 +62,6 @@ import static org.mockito.Mockito.*;
         Long id = 1L;
         Pedido pedido = new Pedido();
         pedido.setId(id);
-        pedido.setQuantidade(2);
         pedido.setPizzas(new ArrayList<>());
         pedido.setProdutos(new ArrayList<>());
 
